@@ -1,8 +1,8 @@
 window.addEventListener('load', function () {
     // ===== 常量配置区（统一改配置不用改DOM代码）=====
     const TIP_KEY = "tip_first_open";
-    const PRIVACY_URL = "隐私政策链接";   // 替换成真实隐私地址
-    const AGREEMENT_URL = "服务协议链接"; // 替换成真实服务协议地址
+    const PRIVACY_URL = "https://xmsd.netlify.app/privacy.html";   // 替换成真实隐私地址
+    const AGREEMENT_URL = "https://xmsd.netlify.app/userservices.html"; // 替换成真实服务协议地址
     const Z_INDEX = 9999;
 
     // 判断是否首次打开
