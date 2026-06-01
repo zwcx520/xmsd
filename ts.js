@@ -36,10 +36,3 @@ window.addEventListener('load', function () {
     render();
     statistics();
 });
-    render();
-    statistics();
-});
-});
-    render();
-    statistics();
-});
