@@ -1,11 +1,11 @@
 window.addEventListener('load', function () {
     const TIP_KEY = "tip_first_open";
     if (!localStorage.getItem(TIP_KEY)) {
-        // 动态创建遮罩
+        // 遮罩背景改为白色半透明
         const mask = document.createElement('div');
-        mask.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0.6);z-index:9999;display:flex;align-items:center;justify-content:center;padding:15px;';
+        mask.style.cssText = 'position:fixed;inset:0;background:rgba(255,255,255,0.85);z-index:9999;display:flex;align-items:center;justify-content:center;padding:15px;';
         const wrap = document.createElement('div');
-        wrap.style.cssText = 'max-width:520px;width:100%;background:#fff;border-radius:10px;padding:20px;max-height:80vh;overflow-y:auto;';
+        wrap.style.cssText = 'max-width:520px;width:100%;background:#fff;border-radius:10px;padding:20px;max-height:80vh;overflow-y:auto;border:1px solid #eee;';
 
         wrap.innerHTML = `
             <h3 style="text-align:center;margin:0 0 12px;color:red;font-weight:bold;font-size:20px;">欢迎使用工时记录工具！</h3>
@@ -24,16 +24,17 @@ window.addEventListener('load', function () {
 
         mask.appendChild(wrap);
         document.body.appendChild(mask);
-        // 绑定按钮事件
         wrap.querySelector('button').onclick = () => {
             mask.remove();
             localStorage.setItem(TIP_KEY, "1");
         };
     }
 
-    // 原有初始化代码不变
     $("#r_date").val(fmtToday());
     $("#hourWage").val(getWage());
+    render();
+    statistics();
+});
     render();
     statistics();
 });
