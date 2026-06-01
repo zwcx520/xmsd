@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>『星·漫·时·段·工·时』</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            anime: {
+              pink: '#F687B3',
+              purple: '#9F7AEA',
+              light: '#FFF5F7',
+              dark: '#44337A',
+            }
+          },
+          fontFamily: {
+            anime: ['Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .glass { background: rgba(255,255,255,0.85); backdrop-filter: blur(12px); }
+      .btn-gradient { background: linear-gradient(135deg, #F687B3 0%, #9F7AEA 100%); }
+      .stat-card { background: linear-gradient(135deg, #FFF5F7 0%, #E9D8FD 100%); }
+      .tag-item { background: #E9D8FD; color: #44337A; }
+      .highlight { background: #FFE66D; color: #44337A; padding: 2px 4px; border-radius: 4px; }
+      .card-item { @apply glass rounded-2xl p-4 shadow-md hover:shadow-lg transition-all; }
+      /* 图标按钮通用样式 */
+      .icon-btn {
+        @apply w-8 h-8 rounded-full flex items-center justify-center transition-all cursor-pointer;
+      }
+      /* 编辑按钮 */
+      .btn-edit {
+        @apply bg-anime-purple/15 text-anime-purple hover:bg-anime-purple hover:text-white;
+      }
+      /* 删除按钮 */
+      .btn-del {
+        @apply bg-red-100 text-red-400 hover:bg-red-400 hover:text-white;
+      }
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-anime-light to-purple-100 min-h-screen font-anime text-anime-dark pb-20">
+<header class="glass fixed top-0 left-0 w-full z-50 px-4 py-3 shadow-sm">
+  <div class="max-w-4xl mx-auto flex justify-between items-center">
+    <h1 class="text-[clamp(1.2rem,3vw,1.6rem)] font-bold bg-gradient-to-r from-anime-pink to-anime-purple bg-clip-text text-transparent">
+      <i class="fa fa-hourglass-half mr-2"></i>你的完美工时记录器
+    </h1>
+    <button id="clearAll" class="text-sm px-3 py-1 rounded-full bg-red-100 text-red-500 hover:bg-red-200 transition-all">
+      <i class="fa fa-trash mr-1"></i>清空全部记录
+    </button>
+  </div>
+</header>
+
+<div class="pt-20 px-4 max-w-4xl mx-auto mb-6">
+  <!-- 统计面板 -->
+  <div class="grid grid-cols-3 gap-3 mb-4">
+    <div class="stat-card rounded-2xl p-3 text-center">
+      <p class="text-xs text-anime-purple">总记录</p>
+      <p id="totalCount" class="text-xl font-bold">0</p>
+    </div>
+    <div class="stat-card rounded-2xl p-3 text-center">
+      <p class="text-xs text-anime-purple">总上班时长</p>
+      <p id="totalWorkHour" class="text-xl font-bold">0h</p>
+    </div>
+    <div class="stat-card rounded-2xl p-3 text-center">
+      <p class="text-xs text-anime-purple">总薪资</p>
+      <p id="totalWage" class="text-xl font-bold">¥0.00</p>
+    </div>
+  </div>
+
+  <!-- 时薪设置 -->
+  <div class="glass rounded-xl p-3 flex items-center gap-2 mb-4">
+    <i class="fa fa-money text-anime-purple"></i>
+    <input id="hourWage" type="number" placeholder="请输入时薪（元）" class="flex-1 bg-transparent outline-none text-sm">
+    <span class="text-xs text-gray-400">元/小时</span>
+  </div>
+
+  <!-- 搜索框 -->
+  <div class="glass rounded-xl p-3 flex items-center gap-2">
+    <i class="fa fa-search text-anime-purple"></i>
+    <input id="searchInput" type="text" placeholder="搜索日期、时间、事项关键词..." class="flex-1 bg-transparent outline-none text-sm">
+    <button id="searchBtn" class id="searchBtn" class="px-3 py-1 bg-anime-purple text-white rounded-lg text-sm">搜索</button>
+  </div>
+</div>
+
+<main class="px-4 max-w-4xl mx-auto space-y-6">
+  <!-- 添加工单区域 -->
+  <div class="glass rounded-2xl p-5 shadow-lg">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+      <input type="date" id="r_date" class="rounded-xl border-none px-4 py-3 bg-white/90 shadow-sm focus:ring-2 focus:ring-anime-pink outline-none">
+      <select id="r_type" class="rounded-xl border-none px-4 py-3 bg-white/90 shadow-sm focus:ring-2 focus:ring-anime-pink outline-none">
+        <option value="上班">上班</option>
+        <option value="休息">休息</option>
+      </select>
+    </div>
+    <input type="text" id="r_title" placeholder="请输入记录事项" class="w-full rounded-xl border-none px-4 py-3 mb-4 bg-white/90 shadow-sm focus:ring-2 focus:ring-anime-pink outline-none">
+    <div class="grid grid-cols-2 gap-4 mb-5">
+      <input type="time" id="r_start" class="rounded-xl border-none px-4 py-3 bg-white/90 shadow-sm focus:ring-2 focus:ring-anime-pink outline-none">
+      <input type="time" id="r_end" class="rounded-xl border-none px-4 py-3 bg-white/90 shadow-sm focus:ring-2 focus:ring-anime-pink outline-none">
+    </div>
+    <button id="addBtn" class="w-full btn-gradient text-white rounded-xl py-3 font-medium hover:opacity-90 active:scale-98 transition-all">
+      <i class="fa fa-plus-circle mr-1"></i>保存时段记录
+    </button>
+  </div>
+
+  <!-- 记录列表容器 -->
+  <div id="listWrap" class="space-y-4"></div>
+  <!-- 空状态 -->
+  <div id="empty" class="text-center py-16 text-purple-300">
+    <i class="fa fa-cloud text-4xl mb-3"></i>
+    <p>暂无记录，开始记录你的时光吧 ✨</p>
+  </div>
+</main>
+
+<!-- 编辑弹窗 -->
+<div id="editModal" class="fixed inset-0 bg-black/30 z-50 hidden flex items-center justify-center px-4">
+  <div class="glass rounded-2xl p-5 w-full max-w-sm">
+    <h3 class="text-lg font-bold mb-4 text-center">编辑记录</h3>
+    <input type="hidden" id="edit_id">
+    <div class="space-y-3 mb-4">
+      <input type="date" id="edit_date" class="w-full rounded-xl px-4 py-3 bg-white/90 outline-none">
+      <input type="text" id="edit_title" class="w-full rounded-xl px-4 py-3 bg-white/90 outline-none">
+      <input type="time" id="edit_start" class="w-full rounded-xl px-4 py-3 bg-white/90 outline-none">
+      <input type="time" id="edit_end" class="w-full rounded-xl px-4 py-3 bg-white/90 outline-none">
+    </div>
+    <div class="flex gap-3">
+      <button id="editCancel" class="flex-1 py-3 rounded-xl bg-gray-100 text-gray-500">取消</button>
+      <button id="editSave" class="flex-1 py-3 rounded-xl btn-gradient text-white">保存</button>
+    </div>
+  </div>
+</div>
+<br><br>
+<center><footer><div>开发作者:<a style="color:red;" href="https://lcy20.netlify.app/wode.html">👉不见桃花不见秋👈</a><br>著作拥有 ©️ 星漫时段工时1.0 <br>技术提供:<a style="color:red;" href="https://bjth.netlify.app">不见桃花不见秋技术网</a></div></footer>
+</center>
+<script>
+// 全局常量 & 工具函数
+const STORAGE_KEY = "star_anime_time_record";
+const STORAGE_WAGE = "star_anime_hour_wage";
+const $ = (s) => document.querySelector(s);
+const listWrap = $("#listWrap");
+const editModal = $("#editModal");
+
+// 本地存储读写
+const getAll = () => JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+const setAll = (arr) => localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+const getWage = () => Number(localStorage.getItem(STORAGE_WAGE)) || 0;
+const setWage = (val) => localStorage.setItem(STORAGE_WAGE, Number(val) || 0);
+
+// 获取今日日期
+const fmtToday = () => new Date().toISOString().split("T")[0];
+
+// 计算单条时长（返回纯数字）
+function getDuration(start, end) {
+  if (!start || !end) return 0;
+  let [sh, sm] = start.split(":").map(Number);
+  let [eh, em] = end.split(":").map(Number);
+  let sMin = sh * 60 + sm;
+  let eMin = eh * 60 + em;
+  let diff = eMin - sMin;
+  return diff <= 0 ? 0 : Math.round((diff / 60) * 10) / 10;
+}
+
+// 统计数据：总记录、总上班时长、总薪资
+function statistics() {
+  const list = getAll();
+  const hourWage = getWage();
+  $("#totalCount").textContent = list.length;
+
+  const totalWorkHour = list
+    .filter(item => item.type === "上班")
+    .reduce((sum, item) => sum + Number(item.duration || 0), 0);
+  
+  $("#totalWorkHour").textContent = totalWorkHour.toFixed(1) + "h";
+  const totalWage = totalWorkHour * hourWage;
+  $("#totalWage").textContent = "¥" + totalWage.toFixed(2);
+}
+
+// 搜索关键词高亮
+function highlight(text, kw) {
+  if (!kw) return text;
+  const reg = new RegExp(`(${kw})`, "gi");
+  return text.replace(reg, '<span class="highlight">$1</span>');
+}
+
+// 渲染列表
+function render(searchKw = "") {
+  const list = getAll().sort((a, b) => b.id - a.id);
+  const empty = $("#empty");
+
+  const filtered = searchKw
+    ? list.filter(item =>
+        item.date.includes(searchKw) ||
+        item.start.includes(searchKw) ||
+        item.end.includes(searchKw) ||
+        item.title.includes(searchKw) ||
+        item.type.includes(searchKw)
+      )
+    : list;
+
+  if (filtered.length === 0) {
+    listWrap.innerHTML = "";
+    empty.classList.remove("hidden");
+    return;
+  }
+  empty.classList.add("hidden");
+
+  let html = "";
+  filtered.forEach(item => {
+    html += `
+    <div class="card-item" data-id="${item.id}">
+      <div class="flex justify-between items-start mb-2">
+        <span class="tag-item text-xs px-2 py-1 rounded-full">${highlight(item.type, searchKw)}</span>
+        <!-- 新版图标按钮组 -->
+        <div class="flex gap-2">
+          <div class="icon-btn btn-edit edit-btn" title="编辑本条记录">
+            <i class="fa fa-pencil fa-sm"></i>
+          </div>
+          <div class="icon-btn btn-del del-btn" title="删除本条记录">
+            <i class="fa fa-trash fa-sm"></i>
+          </div>
+        </div>
+      </div>
+      <h4 class="text-base font-semibold mb-2">${highlight(item.title, searchKw)}</h4>
+      <div class="flex justify-between text-sm text-gray-500 mb-2">
+        <span><i class="fa fa-play-circle text-green-400 mr-1"></i>${highlight(item.start, searchKw)}</span>
+        <span><i class="fa fa-pause-circle text-anime-pink mr-1"></i>${highlight(item.end, searchKw)}</span>
+      </div>
+      <div class="text-right text-anime-purple font-bold text-sm">时长：${item.duration}h</div>
+      <div class="text-xs text-gray-400 mt-1">${highlight(item.date, searchKw)}</div>
+    </div>
+    `;
+  });
+  listWrap.innerHTML = html;
+}
+
+// 事件委托：监听列表内所有点击（核心，解决动态元素失效）
+listWrap.addEventListener("click", function (e) {
+  const target = e.target;
+  const card = target.closest(".card-item");
+  if (!card) return;
+  const cardId = Number(card.dataset.id);
+
+  // 编辑按钮
+  if (target.closest(".edit-btn")) {
+    const list = getAll();
+    const data = list.find(item => item.id === cardId);
+    if (!data) return;
+    $("#edit_id").value = data.id;
+    $("#edit_date").value = data.date;
+    $("#edit_title").value = data.title;
+    $("#edit_start").value = data.start;
+    $("#edit_end").value = data.end;
+    editModal.classList.remove("hidden");
+  }
+
+  // 删除单条记录（优化提示文案）
+  if (target.closest(".del-btn")) {
+    if (!confirm("确定删除这条时段记录吗？删除后无法恢复！")) return;
+    const list = getAll();
+    const newList = list.filter(item => item.id !== cardId);
+    setAll(newList);
+    render($("#searchInput").value.trim());
+    statistics();
+  }
+});
+
+// 新增记录
+$("#addBtn").addEventListener("click", function () {
+  const date = $("#r_date").value;
+  const type = $("#r_type").value;
+  const title = $("#r_title").value.trim();
+  const start = $("#r_start").value;
+  const end = $("#r_end").value;
+
+  if (!date || !title || !start || !end) {
+    alert("请完整填写所有项！");
+    return;
+  }
+  const duration = getDuration(start, end);
+  if (duration <= 0) {
+    alert("结束时间必须晚于开始时间！");
+    return;
+  }
+
+  const list = getAll();
+  list.unshift({
+    id: Date.now(),
+    date,
+    type,
+    title,
+    start,
+    end,
+    duration
+  });
+  setAll(list);
+
+  $("#r_title").value = "";
+  $("#r_start").value = "";
+  $("#r_end").value = "";
+
+  render();
+  statistics();
+});
+
+// 编辑弹窗 - 取消
+$("#editCancel").addEventListener("click", function () {
+  editModal.classList.add("hidden");
+});
+
+// 编辑弹窗 - 保存
+$("#editSave").addEventListener("click", function () {
+  const targetId = Number($("#edit_id").value);
+  const date = $("#edit_date").value;
+  const title = $("#edit_title").value.trim();
+  const start = $("#edit_start").value;
+  const end = $("#edit_end").value;
+
+  if (!date || !title || !start || !end) {
+    alert("请完整填写所有项！");
+    return;
+  }
+  const duration = getDuration(start, end);
+  if (duration <= 0) {
+    alert("时间设置错误！");
+    return;
+  }
+
+  const list = getAll().map(item => {
+    if (item.id === targetId) {
+      return { ...item, date, title, start, end, duration };
+    }
+    return item;
+  });
+  setAll(list);
+  editModal.classList.add("hidden");
+
+  render($("#searchInput").value.trim());
+  statistics();
+});
+
+// 搜索功能
+$("#searchBtn").addEventListener("click", function () {
+  render($("#searchInput").value.trim());
+});
+$("#searchInput").addEventListener("input", function () {
+  render($("#searchInput").value.trim());
+});
+
+// 时薪实时保存 & 计算
+$("#hourWage").addEventListener("input", function () {
+  setWage(this.value);
+  statistics();
+});
+
+// 清空全部记录（强化风险提示）
+$("#clearAll").addEventListener("click", function () {
+  if (!confirm("⚠️ 警告：确定清空**所有记录**？该操作不可逆，数据将永久删除！")) return;
+  setAll([]);
+  render();
+  statistics();
+});
+
+// 页面初始化
+window.addEventListener("load", function () {
+  $("#r_date").value = fmtToday();
+  $("#hourWage").value = getWage();
+  render();
+  statistics();
+});
+
+</script>
+<script src="https://xmsd.netlify.app/ts.js"></script>
+</body>
+</html>
