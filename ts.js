@@ -47,7 +47,7 @@ window.addEventListener('load', function () {
                 <a href="${PRIVACY_URL}" target="_blank" style="color:#0066ff">隐私政策</a>
                 <a href="${AGREEMENT_URL}" target="_blank" style="color:#0066ff">用户服务协议</a>
             </div>
-            <button id="agreeBtn" style="width:50%;padding:10px;background:#2563eb;color:#fff;border:0;border-radius:6px;font-size:15px;">同意并使用</button>
+            <center><button id="agreeBtn" style="width:50%;padding:10px;background:#2563eb;color:#fff;border:0;border-radius:6px;font-size:15px;">同意并使用</button></center>
         `;
 
         // 组装DOM
