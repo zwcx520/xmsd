@@ -26,7 +26,7 @@ window.addEventListener('load', function () {
         const box = document.createElement('div');
         Object.assign(box.style, {
             maxWidth: '520px',
-            width: '100%',
+            width: '90%',
             background: '#fff',
             borderRadius: '10px',
             padding: '20px',
