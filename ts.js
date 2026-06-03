@@ -1,12 +1,14 @@
 window.addEventListener('load', function () {
     // ===== 常量配置区（统一改配置不用改DOM代码）=====
-    const TIP_KEY = "tip_first_open";
+    const TIP_KEY = "app_tip_version"; // 本地存储key（改用版本存储）
+    const APP_TIP_VER = "1"; // ✅关键：修改这个数字(1→2/3/4)，所有用户下次打开就会重新弹窗
     const PRIVACY_URL = "https://xmsd.netlify.app/privacy.html";   // 替换成真实隐私地址
     const AGREEMENT_URL = "https://xmsd.netlify.app/userservices.html"; // 替换成真实服务协议地址
     const Z_INDEX = 9999;
 
-    // 判断是否首次打开
-    if (!localStorage.getItem(TIP_KEY)) {
+    // 【修改缓存判断逻辑】：读取本地存储版本，和当前版本不一致则弹窗
+    const localSaveVer = localStorage.getItem(TIP_KEY);
+    if (localSaveVer !== APP_TIP_VER) {
         // 1. 创建遮罩层
         const mask = document.createElement('div');
         Object.assign(mask.style, {
@@ -52,11 +54,12 @@ window.addEventListener('load', function () {
         mask.appendChild(box);
         document.body.appendChild(mask);
 
-        // 同意按钮事件
+        // 同意按钮事件：点击后存入最新版本号
         const agreeBtn = document.getElementById('agreeBtn');
         agreeBtn.addEventListener('click', () => {
             mask.remove();
-            localStorage.setItem(TIP_KEY, "1");
+            // 存入当前最新版本，下次版本不变不再弹窗
+            localStorage.setItem(TIP_KEY, APP_TIP_VER);
         });
     }
 
