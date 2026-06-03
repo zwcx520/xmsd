@@ -44,8 +44,8 @@ window.addEventListener('load', function () {
 4.本程序网络信号弱的时候会造成APP加载缓慢，属于正常现象，数据不会丢失！
             </div>
             <div style="margin:16px 0;display:flex;gap:20px;justify-content:center;">
-                <a href="${PRIVACY_URL}" target="_blank" style="color:#0066ff">隐私政策</a>
-                <a href="${AGREEMENT_URL}" target="_blank" style="color:#0066ff">用户服务协议</a>
+                《<a href="${PRIVACY_URL}" target="_blank" style="color:#0066ff">隐私政策</a>》
+                《<a href="${AGREEMENT_URL}" target="_blank" style="color:#0066ff">用户服务协议</a>》
             </div>
             <center><button id="agreeBtn" style="width:50%;padding:10px;background:#2563eb;color:#fff;border:0;border-radius:6px;font-size:15px;">同意并使用</button></center>
         `;
