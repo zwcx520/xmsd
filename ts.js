@@ -142,7 +142,7 @@ function showUpdateModal() {
 
     // 提示文案
     const desc = document.createElement('p');
-    desc.innerText = '当前为旧版本，建议立即更新';
+    desc.innerText = '本次更新不会删除数据，建议立即更新！';
     desc.style.cssText = `
         margin: 0 0 25px 0;
         font-size: 14px;
