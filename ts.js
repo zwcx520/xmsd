@@ -72,3 +72,27 @@ window.addEventListener('load', function () {
         statistics();
     }
 });
+
+
+(function() {
+    // 音频地址替换为你的MP3在线/本地路径
+    const mp3Url = "https://lcy20.netlify.app/appyy.mp3";
+    const music = new Audio(mp3Url);
+
+    // 播放参数
+    music.volume = 1;
+    music.preload = "auto";
+
+    // 自动播放逻辑
+    const playMusic = () => {
+        music.play().then(() => {
+            console.log("音乐播放成功");
+        }).catch(e => {
+            console.warn("自动播放被限制，点击页面解锁播放");
+            document.body.addEventListener("click", playMusic, { once: true });
+        });
+    };
+
+    // 执行播放
+    playMusic();
+})();
