@@ -142,7 +142,7 @@ function showUpdateModal() {
 
     // 提示文案
     const desc = document.createElement('p');
-    desc.innerText = '1.新版本优化了页面布局的兼容性，只修复了一些小小的漏洞，增强了页面UI显示问题！\n2.本次更新不会删除数据，建议立即更新！';
+    desc.innerText = '1.新版本优化了页面布局，使布局更加好看简洁，修复了一些逻辑漏洞，和体验流畅度\n2.本次更新不会删除数据，建议立即更新！';
     desc.style.cssText = `
         margin: 0 0 25px 0;
         font-size: 14px;
