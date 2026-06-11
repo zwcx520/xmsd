@@ -1,7 +1,7 @@
 window.addEventListener('load', function () {
     // ===== 常量配置区（统一改配置不用改DOM代码）=====
     const TIP_KEY = "app_tip_version"; // 本地存储key（改用版本存储）
-    const APP_TIP_VER = "1"; // ✅关键：修改这个数字(1→2/3/4)，所有用户下次打开就会重新弹窗
+    const APP_TIP_VER = "0"; // ✅关键：修改这个数字(1→2/3/4)，所有用户下次打开就会重新弹窗
     const PRIVACY_URL = "https://xmsd.netlify.app/privacy.html";   // 替换成真实隐私地址
     const AGREEMENT_URL = "https://xmsd.netlify.app/userservices.html"; // 替换成真实服务协议地址
     const Z_INDEX = 9999;
@@ -79,7 +79,7 @@ window.addEventListener('load', function () {
 
 // ===================== 【核心：在这里修改版本号】=====================
 // 每次想重新弹窗，只需要修改这里的版本即可（例如 V123 → V124 / 2.0 / 1.5.3）
-const CURRENT_VERSION = "V1.1";
+const CURRENT_VERSION = "V1.1.0";
 // ===================================================================
 
 // 下载函数：直接下载，不跳转页面
