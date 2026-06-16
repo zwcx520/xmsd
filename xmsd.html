@@ -11,15 +11,69 @@
       theme: {
         extend: {
           colors: {
-            anime: {
-              pink: '#F687B3',
-              purple: '#9F7AEA',
-              light: '#FFF5F7',
-              dark: '#44337A',
+            sakura: {
+              50: '#FFF0F5',
+              100: '#FFE4E1',
+              200: '#FFC0CB',
+              300: '#FFB7C5',
+              400: '#FF69B4',
+              500: '#FF1493',
+            },
+            lavender: {
+              50: '#F0F0FF',
+              100: '#E6E6FA',
+              200: '#D8BFD8',
+              300: '#9370DB',
+              400: '#8A2BE2',
+              500: '#4B0082',
+            },
+            starlight: {
+              gold: '#FFD700',
+              pink: '#FF69B4',
+              blue: '#87CEEB',
+              purple: '#9370DB',
             }
           },
           fontFamily: {
-            anime: ['Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'sans-serif']
+            anime: ['"ZCOOL KuaiLe"', '"Ma Shan Zheng"', 'Segoe UI', 'sans-serif']
+          },
+          animation: {
+            'float': 'float 3s ease-in-out infinite',
+            'float-slow': 'float 4s ease-in-out infinite',
+            'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
+            'sparkle': 'sparkle 1.5s ease-in-out infinite',
+            'sakura-fall': 'sakura-fall 12s linear infinite',
+            'heart-beat': 'heart-beat 1s ease-in-out infinite',
+            'twinkle': 'twinkle 2s ease-in-out infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-12px)' },
+            },
+            'pulse-glow': {
+              '0%, 100%': { boxShadow: '0 0 20px rgba(255, 183, 197, 0.5), 0 0 40px rgba(147, 112, 219, 0.3)' },
+              '50%': { boxShadow: '0 0 40px rgba(255, 183, 197, 0.8), 0 0 60px rgba(147, 112, 219, 0.5)' },
+            },
+            sparkle: {
+              '0%, 100%': { opacity: '1', transform: 'scale(1)' },
+              '50%': { opacity: '0.6', transform: 'scale(1.3)' },
+            },
+            'sakura-fall': {
+              '0%': { transform: 'translateY(-10vh) rotate(0deg) translateX(0)', opacity: '1' },
+              '25%': { transform: 'translateY(25vh) rotate(90deg) translateX(20px)', opacity: '0.9' },
+              '50%': { transform: 'translateY(50vh) rotate(180deg) translateX(-10px)', opacity: '0.8' },
+              '75%': { transform: 'translateY(75vh) rotate(270deg) translateX(15px)', opacity: '0.5' },
+              '100%': { transform: 'translateY(100vh) rotate(360deg) translateX(0)', opacity: '0' },
+            },
+            'heart-beat': {
+              '0%, 100%': { transform: 'scale(1)' },
+              '50%': { transform: 'scale(1.1)' },
+            },
+            twinkle: {
+              '0%, 100%': { opacity: '0.3' },
+              '50%': { opacity: '1' },
+            }
           }
         }
       }
@@ -27,138 +81,304 @@
   </script>
   <style type="text/tailwindcss">
     @layer utilities {
-      .glass { background: rgba(255,255,255,0.85); backdrop-filter: blur(12px); }
-      .btn-gradient { background: linear-gradient(135deg, #F687B3 0%, #9F7AEA 100%); }
-      .stat-card { background: linear-gradient(135deg, #FFF5F7 0%, #E9D8FD 100%); }
-      .tag-item { background: #E9D8FD; color: #44337A; }
-      .highlight { background: #FFE66D; color: #44337A; padding: 2px 4px; border-radius: 4px; }
-      .card-item { @apply glass rounded-2xl p-4 shadow-md hover:shadow-lg transition-all; }
-      /* 图标按钮通用样式 */
+      .glass-card {
+        background: rgba(255, 255, 255, 0.65);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 183, 197, 0.4);
+        box-shadow: 0 8px 32px rgba(255, 183, 197, 0.15);
+      }
+      .btn-romance {
+        background: linear-gradient(135deg, #FFB7C5 0%, #FF69B4 50%, #9370DB 100%);
+        box-shadow: 0 4px 20px rgba(255, 105, 180, 0.4);
+        position: relative;
+        overflow: hidden;
+      }
+      .btn-romance::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+        transition: left 0.5s;
+      }
+      .btn-romance:hover::before {
+        left: 100%;
+      }
+      .btn-romance:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 30px rgba(255, 105, 180, 0.6);
+      }
+      .stat-glass {
+        background: linear-gradient(135deg, rgba(255, 240, 245, 0.95) 0%, rgba(230, 230, 250, 0.95) 100%);
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 183, 197, 0.3);
+      }
+      .tag-romance {
+        background: linear-gradient(135deg, #FFE4E1 0%, #E6E6FA 100%);
+        color: #4B0082;
+        border: 1px solid rgba(255, 183, 197, 0.3);
+      }
+      .highlight-romance {
+        background: linear-gradient(135deg, #FFD700 0%, #FF69B4 100%);
+        color: #4B0082;
+        padding: 2px 8px;
+        border-radius: 8px;
+        font-weight: bold;
+      }
+      .card-romance {
+        @apply glass-card rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all duration-500;
+      }
+      .card-romance:hover {
+        transform: translateY(-5px);
+      }
+      .input-romance {
+        @apply rounded-2xl border-none px-5 py-4 bg-white/70 shadow-sm focus:ring-4 focus:ring-sakura-300/60 outline-none transition-all;
+      }
       .icon-btn {
-        @apply w-8 h-8 rounded-full flex items-center justify-center transition-all cursor-pointer;
+        @apply w-11 h-11 rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer;
       }
-      /* 编辑按钮 */
-      .btn-edit {
-        @apply bg-anime-purple/15 text-anime-purple hover:bg-anime-purple hover:text-white;
+      .btn-edit-romance {
+        @apply bg-lavender-100 text-lavender-400 hover:bg-lavender-400 hover:text-white;
       }
-      /* 删除按钮 */
-      .btn-del {
-        @apply bg-red-100 text-red-400 hover:bg-red-400 hover:text-white;
+      .btn-del-romance {
+        @apply bg-sakura-100 text-sakura-400 hover:bg-sakura-400 hover:text-white;
+      }
+      .star-decoration {
+        position: absolute;
+        font-size: 14px;
+        color: #FFD700;
+        animation: sparkle 1.5s ease-in-out infinite;
+        text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+      }
+      .sakura-petal {
+        position: absolute;
+        font-size: 16px;
+        color: #FFB7C5;
+        opacity: 0.8;
+        pointer-events: none;
+      }
+      .heart-decoration {
+        position: absolute;
+        font-size: 12px;
+        color: #FF69B4;
+        animation: heart-beat 1.5s ease-in-out infinite;
+        opacity: 0.6;
       }
     }
   </style>
+  <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
 </head>
-<body class="bg-gradient-to-br from-anime-light to-purple-100 min-h-screen font-anime text-anime-dark pb-20">
-<header class="glass fixed top-0 left-0 w-full z-50 px-4 py-3 shadow-sm">
-  <div class="max-w-4xl mx-auto flex justify-between items-center">
-    <h1 class="text-[clamp(1.2rem,3vw,1.6rem)] font-bold bg-gradient-to-r from-anime-pink to-anime-purple bg-clip-text text-transparent">
-      <i class="fa fa-hourglass-half mr-2"></i>你的完美工时记录器
-    </h1>
-    <button id="clearAll" class="text-sm px-3 py-1 rounded-full bg-red-100 text-red-500 hover:bg-red-200 transition-all">
-      <i class="fa fa-trash mr-1"></i>清空全部记录
-    </button>
-  </div>
-</header>
+<body class="bg-gradient-to-br from-sakura-50 via-white to-lavender-50 min-h-screen font-anime text-lavender-500 overflow-x-hidden">
+  <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+    <div class="star-decoration" style="top: 8%; left: 5%; animation-delay: 0s;">✦</div>
+    <div class="star-decoration" style="top: 18%; left: 92%; animation-delay: 0.6s;">✧</div>
+    <div class="star-decoration" style="top: 32%; left: 12%; animation-delay: 1.2s;">✦</div>
+    <div class="star-decoration" style="top: 48%; left: 88%; animation-delay: 0.9s;">✧</div>
+    <div class="star-decoration" style="top: 62%; left: 8%; animation-delay: 1.5s;">✦</div>
+    <div class="star-decoration" style="top: 78%; left: 94%; animation-delay: 0.4s;">✧</div>
+    <div class="star-decoration" style="top: 12%; left: 55%; animation-delay: 1.1s;">✦</div>
+    <div class="star-decoration" style="top: 72%; left: 28%; animation-delay: 0.7s;">✧</div>
+    <div class="star-decoration" style="top: 42%; left: 3%; animation-delay: 1.4s;">✦</div>
+    <div class="star-decoration" style="top: 88%; left: 62%; animation-delay: 0.3s;">✧</div>
+    <div class="star-decoration" style="top: 55%; left: 45%; animation-delay: 1.3s;">✦</div>
+    <div class="star-decoration" style="top: 25%; left: 35%; animation-delay: 0.8s;">✧</div>
 
-<div class="pt-20 px-4 max-w-4xl mx-auto mb-6">
-  <!-- 统计面板 -->
-  <div class="grid grid-cols-3 gap-3 mb-4">
-    <div class="stat-card rounded-2xl p-3 text-center">
-      <p class="text-xs text-anime-purple">总记录</p>
-      <p id="totalCount" class="text-xl font-bold">0</p>
-    </div>
-    <div class="stat-card rounded-2xl p-3 text-center">
-      <p class="text-xs text-anime-purple">总上班时长</p>
-      <p id="totalWorkHour" class="text-xl font-bold">0h</p>
-    </div>
-    <div class="stat-card rounded-2xl p-3 text-center">
-      <p class="text-xs text-anime-purple">总薪资</p>
-      <p id="totalWage" class="text-xl font-bold">¥0.00</p>
-    </div>
-  </div>
+    <div class="heart-decoration" style="top: 22%; left: 18%;">♥</div>
+    <div class="heart-decoration" style="top: 58%; left: 82%; animation-delay: 0.5s;">♥</div>
+    <div class="heart-decoration" style="top: 85%; left: 25%; animation-delay: 1s;">♥</div>
+    <div class="heart-decoration" style="top: 38%; left: 75%; animation-delay: 0.3s;">♥</div>
 
-  <!-- 时薪设置 -->
-  <div class="glass rounded-xl p-3 flex items-center gap-2 mb-4">
-    <i class="fa fa-money text-anime-purple"></i>
-    <input id="hourWage" type="number" placeholder="请输入时薪（元）" class="flex-1 bg-transparent outline-none text-sm">
-    <span class="text-xs text-gray-400">元/小时</span>
+    <div class="sakura-petal animate-sakura-fall" style="top: -5%; left: 10%; animation-delay: 0s; font-size: 20px;">🌸</div>
+    <div class="sakura-petal animate-sakura-fall" style="top: -5%; left: 35%; animation-delay: 3s; font-size: 16px;">🌸</div>
+    <div class="sakura-petal animate-sakura-fall" style="top: -5%; left: 60%; animation-delay: 6s; font-size: 18px;">🌸</div>
+    <div class="sakura-petal animate-sakura-fall" style="top: -5%; left: 85%; animation-delay: 9s; font-size: 14px;">🌸</div>
+    <div class="sakura-petal animate-sakura-fall" style="top: -5%; left: 20%; animation-delay: 4s; font-size: 17px;">🌸</div>
+    <div class="sakura-petal animate-sakura-fall" style="top: -5%; left: 50%; animation-delay: 7s; font-size: 19px;">🌸</div>
+    <div class="sakura-petal animate-sakura-fall" style="top: -5%; left: 75%; animation-delay: 2s; font-size: 15px;">🌸</div>
+    <div class="sakura-petal animate-sakura-fall" style="top: -5%; left: 40%; animation-delay: 8s; font-size: 20px;">🌸</div>
   </div>
 
-  <!-- 搜索框 -->
-  <div class="glass rounded-xl p-3 flex items-center gap-2">
-    <i class="fa fa-search text-anime-purple"></i>
-    <input id="searchInput" type="text" placeholder="搜索日期、时间、事项关键词..." class="flex-1 bg-transparent outline-none text-sm">
-    <button id="searchBtn" class id="searchBtn" class="px-3 py-1 bg-anime-purple text-white rounded-lg text-sm">搜索</button>
-  </div>
-</div>
+  <header class="glass-card fixed top-0 left-0 w-full z-50 px-4 py-4 shadow-xl">
+    <div class="max-w-4xl mx-auto flex justify-between items-center">
+      <div class="flex items-center gap-4">
+        <div class="w-12 h-12 rounded-full btn-romance flex items-center justify-center animate-float-slow shadow-lg">
+          <i class="fa fa-hourglass-half text-white text-lg"></i>
+        </div>
+        <div>
+          <h1 class="text-[clamp(1.3rem,3vw,1.8rem)] font-bold bg-gradient-to-r from-sakura-400 via-lavender-300 to-sakura-400 bg-clip-text text-transparent">
+            星漫时段
+          </h1>
+          <p class="text-xs text-lavender-300">工时记录 · 珍藏美好</p>
+        </div>
+      </div>
+      <button id="clearAll" class="text-sm px-5 py-2.5 rounded-full bg-sakura-100 text-sakura-400 hover:bg-sakura-200 hover:text-sakura-500 transition-all duration-300 flex items-center gap-2 shadow-sm">
+        <i class="fa fa-trash-o"></i>清空回忆
+      </button>
+    </div>
+  </header>
 
-<main class="px-4 max-w-4xl mx-auto space-y-6">
-  <!-- 添加工单区域 -->
-  <div class="glass rounded-2xl p-5 shadow-lg">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-      <input type="date" id="r_date" class="rounded-xl border-none px-4 py-3 bg-white/90 shadow-sm focus:ring-2 focus:ring-anime-pink outline-none">
-      <select id="r_type" class="rounded-xl border-none px-4 py-3 bg-white/90 shadow-sm focus:ring-2 focus:ring-anime-pink outline-none">
-        <option value="上班">上班</option>
-        <option value="休息">休息</option>
-      </select>
+  <div class="pt-28 px-4 max-w-4xl mx-auto mb-8 relative z-10">
+    <div class="text-center mb-8">
+      <p class="text-lavender-300 text-sm flex items-center justify-center gap-2">
+        <i class="fa fa-heart text-sakura-400 animate-heart-beat"></i>
+        记录每一段美好的时光 · 珍藏每一份心动回忆
+        <i class="fa fa-heart text-sakura-400 animate-heart-beat"></i>
+      </p>
     </div>
-    <input type="text" id="r_title" placeholder="请输入记录事项" class="w-full rounded-xl border-none px-4 py-3 mb-4 bg-white/90 shadow-sm focus:ring-2 focus:ring-anime-pink outline-none">
-    <div class="grid grid-cols-2 gap-4 mb-5">
-      <input type="time" id="r_start" class="rounded-xl border-none px-4 py-3 bg-white/90 shadow-sm focus:ring-2 focus:ring-anime-pink outline-none">
-      <input type="time" id="r_end" class="rounded-xl border-none px-4 py-3 bg-white/90 shadow-sm focus:ring-2 focus:ring-anime-pink outline-none">
+
+    <div class="grid grid-cols-3 gap-5 mb-8">
+      <div class="stat-glass rounded-2xl p-5 text-center transform hover:scale-105 transition-transform duration-300">
+        <div class="w-12 h-12 mx-auto mb-3 rounded-full bg-gradient-to-br from-sakura-300 to-lavender-300 flex items-center justify-center shadow-lg">
+          <i class="fa fa-book text-white text-lg"></i>
+        </div>
+        <p class="text-xs text-lavender-300 mb-2">记忆碎片</p>
+        <p id="totalCount" class="text-2xl font-bold bg-gradient-to-r from-sakura-400 to-lavender-300 bg-clip-text text-transparent">0</p>
+      </div>
+      <div class="stat-glass rounded-2xl p-5 text-center transform hover:scale-105 transition-transform duration-300">
+        <div class="w-12 h-12 mx-auto mb-3 rounded-full bg-gradient-to-br from-starlight-blue to-lavender-300 flex items-center justify-center shadow-lg">
+          <i class="fa fa-clock-o text-white text-lg"></i>
+        </div>
+        <p class="text-xs text-lavender-300 mb-2">时光长河</p>
+        <p id="totalWorkHour" class="text-2xl font-bold bg-gradient-to-r from-starlight-blue to-lavender-300 bg-clip-text text-transparent">0h</p>
+      </div>
+      <div class="stat-glass rounded-2xl p-5 text-center transform hover:scale-105 transition-transform duration-300">
+        <div class="w-12 h-12 mx-auto mb-3 rounded-full bg-gradient-to-br from-starlight-gold to-sakura-400 flex items-center justify-center shadow-lg">
+          <i class="fa fa-gift text-white text-lg"></i>
+        </div>
+        <p class="text-xs text-lavender-300 mb-2">收获满满</p>
+        <p id="totalWage" class="text-2xl font-bold bg-gradient-to-r from-starlight-gold to-sakura-400 bg-clip-text text-transparent">¥0.00</p>
+      </div>
     </div>
-    <button id="addBtn" class="w-full btn-gradient text-white rounded-xl py-3 font-medium hover:opacity-90 active:scale-98 transition-all">
-      <i class="fa fa-plus-circle mr-1"></i>保存时段记录
-    </button>
+
+    <div class="glass-card rounded-2xl p-4 flex items-center gap-4 mb-4">
+      <div class="w-12 h-12 rounded-full bg-gradient-to-br from-sakura-300 to-lavender-300 flex items-center justify-center shadow-md">
+        <i class="fa fa-yen text-white"></i>
+      </div>
+      <input id="hourWage" type="number" placeholder="请输入每小时的心动值..." class="flex-1 bg-transparent outline-none text-sm text-lavender-500 placeholder-lavender-300">
+      <span class="text-xs text-lavender-300">¥/小时</span>
+    </div>
+
+    <div class="glass-card rounded-2xl p-4 flex items-center gap-4">
+      <div class="w-12 h-12 rounded-full bg-gradient-to-br from-lavender-100 to-lavender-300 flex items-center justify-center shadow-md">
+        <i class="fa fa-search text-white"></i>
+      </div>
+      <input id="searchInput" type="text" placeholder="搜索那些美好的回忆..." class="flex-1 bg-transparent outline-none text-sm text-lavender-500 placeholder-lavender-300">
+      <button id="searchBtn" class="px-5 py-2.5 btn-romance text-white rounded-xl text-sm flex items-center gap-2">
+        <i class="fa fa-magic"></i>搜索
+      </button>
+    </div>
   </div>
 
-  <!-- 记录列表容器 -->
-  <div id="listWrap" class="space-y-4"></div>
-  <!-- 空状态 -->
-  <div id="empty" class="text-center py-16 text-purple-300">
-    <i class="fa fa-cloud text-4xl mb-3"></i>
-    <p>暂无记录，开始记录你的时光吧 ✨</p>
-  </div>
-</main>
+  <main class="px-4 max-w-4xl mx-auto space-y-6 pb-32 relative z-10">
+    <div class="glass-card rounded-3xl p-7 shadow-2xl animate-pulse-glow">
+      <div class="text-center mb-7">
+        <h2 class="text-xl font-bold text-lavender-500 flex items-center justify-center gap-3">
+          <span class="starlight-gold text-lg">✧</span> 记录新的时光 <span class="starlight-gold text-lg">✧</span>
+        </h2>
+        <p class="text-xs text-lavender-300 mt-1">每一段时光都值得被珍藏 · 每一份回忆都独一无二</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
+        <div class="relative">
+          <input type="date" id="r_date" class="input-romance w-full">
+          <i class="fa fa-calendar text-lavender-300 absolute right-5 top-1/2 transform -translate-y-1/2"></i>
+        </div>
+        <div class="relative">
+          <select id="r_type" class="input-romance w-full appearance-none">
+            <option value="上班">✨ 工作时光</option>
+            <option value="休息">🌸 休息时刻</option>
+          </select>
+          <i class="fa fa-chevron-down text-lavender-300 absolute right-5 top-1/2 transform -translate-y-1/2 pointer-events-none"></i>
+        </div>
+      </div>
+      
+      <div class="relative mb-6">
+        <input type="text" id="r_title" placeholder="今天发生了什么有趣的事？" class="input-romance w-full">
+        <i class="fa fa-pencil text-lavender-300 absolute right-5 top-1/2 transform -translate-y-1/2"></i>
+      </div>
+      
+      <div class="grid grid-cols-2 gap-5 mb-7">
+        <div class="relative">
+          <input type="time" id="r_start" class="input-romance w-full">
+          <i class="fa fa-play-circle text-green-400/70 absolute right-5 top-1/2 transform -translate-y-1/2"></i>
+        </div>
+        <div class="relative">
+          <input type="time" id="r_end" class="input-romance w-full">
+          <i class="fa fa-stop-circle text-sakura-400/70 absolute right-5 top-1/2 transform -translate-y-1/2"></i>
+        </div>
+      </div>
+      
+      <button id="addBtn" class="w-full btn-romance text-white rounded-2xl py-4 font-medium transition-all flex items-center justify-center gap-3 text-base">
+        <i class="fa fa-heart animate-heart-beat"></i> 珍藏这段时光
+      </button>
+    </div>
 
-<!-- 编辑弹窗 -->
-<div id="editModal" class="fixed inset-0 bg-black/30 z-50 hidden flex items-center justify-center px-4">
-  <div class="glass rounded-2xl p-5 w-full max-w-sm">
-    <h3 class="text-lg font-bold mb-4 text-center">编辑记录</h3>
-    <input type="hidden" id="edit_id">
-    <div class="space-y-3 mb-4">
-      <input type="date" id="edit_date" class="w-full rounded-xl px-4 py-3 bg-white/90 outline-none">
-      <input type="text" id="edit_title" class="w-full rounded-xl px-4 py-3 bg-white/90 outline-none">
-      <input type="time" id="edit_start" class="w-full rounded-xl px-4 py-3 bg-white/90 outline-none">
-      <input type="time" id="edit_end" class="w-full rounded-xl px-4 py-3 bg-white/90 outline-none">
+    <div id="listWrap" class="space-y-5"></div>
+    
+    <div id="empty" class="text-center py-24">
+      <div class="w-32 h-32 mx-auto mb-6 rounded-full bg-gradient-to-br from-sakura-50 to-lavender-50 flex items-center justify-center shadow-lg">
+        <i class="fa fa-cloud text-sakura-300 text-5xl"></i>
+      </div>
+      <p class="text-lavender-300 mb-3">还没有任何回忆...</p>
+      <p class="text-sm text-sakura-400 flex items-center justify-center gap-2">
+        <span>🌸</span> 开始记录你的美好时光吧 <span>🌸</span>
+      </p>
     </div>
-    <div class="flex gap-3">
-      <button id="editCancel" class="flex-1 py-3 rounded-xl bg-gray-100 text-gray-500">取消</button>
-      <button id="editSave" class="flex-1 py-3 rounded-xl btn-gradient text-white">保存</button>
+  </main>
+
+  <div id="editModal" class="fixed inset-0 bg-black/40 z-50 hidden flex items-center justify-center px-4">
+    <div class="glass-card rounded-3xl p-7 w-full max-w-sm shadow-2xl animate-float">
+      <div class="text-center mb-6">
+        <h3 class="text-xl font-bold text-lavender-500 flex items-center justify-center gap-3">
+          <span class="starlight-gold">✧</span> 编辑记忆 <span class="starlight-gold">✧</span>
+        </h3>
+      </div>
+      <input type="hidden" id="edit_id">
+      <div class="space-y-4 mb-7">
+        <input type="date" id="edit_date" class="input-romance w-full">
+        <input type="text" id="edit_title" class="input-romance w-full" placeholder="美好的回忆...">
+        <div class="grid grid-cols-2 gap-4">
+          <input type="time" id="edit_start" class="input-romance w-full">
+          <input type="time" id="edit_end" class="input-romance w-full">
+        </div>
+      </div>
+      <div class="flex gap-4">
+        <button id="editCancel" class="flex-1 py-3 rounded-xl bg-gray-100 text-gray-500 hover:bg-gray-200 transition-all duration-300 flex items-center justify-center gap-2">
+          <i class="fa fa-times"></i>取消
+        </button>
+        <button id="editSave" class="flex-1 py-3 rounded-xl btn-romance text-white flex items-center justify-center gap-2">
+          <i class="fa fa-check"></i>保存
+        </button>
+      </div>
     </div>
   </div>
-</div>
-<br><br>
-<center><footer><div>开发作者:<a style="color:red;" href="https://lcy20.netlify.app/wode.html">👉不见桃花不见秋👈</a><br>著作拥有 ©️ 星漫时段工时1.0 <br>技术提供:<a style="color:red;" href="https://bjth.netlify.app">不见桃花不见秋技术网</a></div></footer>
-</center>
+
+  <footer class="fixed bottom-0 left-0 w-full glass-card py-4 text-center z-40">
+    <div class="text-xs text-lavender-300 flex items-center justify-center gap-2">
+      <span>©️ 星漫时段工时记录</span>
+      <span class="text-sakura-400">♥</span>
+      <span>愿每一段时光都美好</span>
+      <span class="text-sakura-400">♥</span>
+      <span>樱花飘落的季节</span>
+    </div>
+  </footer>
+
 <script>
-// 全局常量 & 工具函数
 const STORAGE_KEY = "star_anime_time_record";
 const STORAGE_WAGE = "star_anime_hour_wage";
 const $ = (s) => document.querySelector(s);
 const listWrap = $("#listWrap");
 const editModal = $("#editModal");
 
-// 本地存储读写
 const getAll = () => JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
 const setAll = (arr) => localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
 const getWage = () => Number(localStorage.getItem(STORAGE_WAGE)) || 0;
 const setWage = (val) => localStorage.setItem(STORAGE_WAGE, Number(val) || 0);
 
-// 获取今日日期
 const fmtToday = () => new Date().toISOString().split("T")[0];
 
-// 计算单条时长（返回纯数字）
 function getDuration(start, end) {
   if (!start || !end) return 0;
   let [sh, sm] = start.split(":").map(Number);
@@ -169,7 +389,6 @@ function getDuration(start, end) {
   return diff <= 0 ? 0 : Math.round((diff / 60) * 10) / 10;
 }
 
-// 统计数据：总记录、总上班时长、总薪资
 function statistics() {
   const list = getAll();
   const hourWage = getWage();
@@ -184,14 +403,12 @@ function statistics() {
   $("#totalWage").textContent = "¥" + totalWage.toFixed(2);
 }
 
-// 搜索关键词高亮
 function highlight(text, kw) {
   if (!kw) return text;
   const reg = new RegExp(`(${kw})`, "gi");
-  return text.replace(reg, '<span class="highlight">$1</span>');
+  return text.replace(reg, '<span class="highlight-romance">$1</span>');
 }
 
-// 渲染列表
 function render(searchKw = "") {
   const list = getAll().sort((a, b) => b.id - a.id);
   const empty = $("#empty");
@@ -216,41 +433,51 @@ function render(searchKw = "") {
   let html = "";
   filtered.forEach(item => {
     html += `
-    <div class="card-item" data-id="${item.id}">
-      <div class="flex justify-between items-start mb-2">
-        <span class="tag-item text-xs px-2 py-1 rounded-full">${highlight(item.type, searchKw)}</span>
-        <!-- 新版图标按钮组 -->
-        <div class="flex gap-2">
-          <div class="icon-btn btn-edit edit-btn" title="编辑本条记录">
-            <i class="fa fa-pencil fa-sm"></i>
+    <div class="card-romance" data-id="${item.id}">
+      <div class="flex justify-between items-start mb-4">
+        <span class="tag-romance text-xs px-4 py-2 rounded-full shadow-sm">${highlight(item.type === '上班' ? '✨ 工作时光' : '🌸 休息时刻', searchKw)}</span>
+        <div class="flex gap-3">
+          <div class="icon-btn btn-edit-romance" title="编辑记忆">
+            <i class="fa fa-pencil"></i>
           </div>
-          <div class="icon-btn btn-del del-btn" title="删除本条记录">
-            <i class="fa fa-trash fa-sm"></i>
+          <div class="icon-btn btn-del-romance" title="删除记忆">
+            <i class="fa fa-trash-o"></i>
           </div>
         </div>
       </div>
-      <h4 class="text-base font-semibold mb-2">${highlight(item.title, searchKw)}</h4>
-      <div class="flex justify-between text-sm text-gray-500 mb-2">
-        <span><i class="fa fa-play-circle text-green-400 mr-1"></i>${highlight(item.start, searchKw)}</span>
-        <span><i class="fa fa-pause-circle text-anime-pink mr-1"></i>${highlight(item.end, searchKw)}</span>
+      <h4 class="text-lg font-semibold mb-4 text-lavender-500">${highlight(item.title, searchKw)}</h4>
+      <div class="flex justify-between items-center text-sm text-gray-400 mb-4">
+        <div class="flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full bg-green-400 shadow-sm"></span>
+          <span>${highlight(item.start, searchKw)}</span>
+        </div>
+        <div class="text-sakura-300 text-lg">→</div>
+        <div class="flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full bg-sakura-400 shadow-sm"></span>
+          <span>${highlight(item.end, searchKw)}</span>
+        </div>
       </div>
-      <div class="text-right text-anime-purple font-bold text-sm">时长：${item.duration}h</div>
-      <div class="text-xs text-gray-400 mt-1">${highlight(item.date, searchKw)}</div>
+      <div class="flex justify-between items-center pt-3 border-t border-sakura-100">
+        <div class="text-xs text-lavender-300 flex items-center gap-1">
+          <i class="fa fa-calendar"></i> ${highlight(item.date, searchKw)}
+        </div>
+        <div class="text-sakura-400 font-bold flex items-center gap-2">
+          <i class="fa fa-clock-o"></i> ${item.duration}h
+        </div>
+      </div>
     </div>
     `;
   });
   listWrap.innerHTML = html;
 }
 
-// 事件委托：监听列表内所有点击（核心，解决动态元素失效）
 listWrap.addEventListener("click", function (e) {
   const target = e.target;
-  const card = target.closest(".card-item");
+  const card = target.closest(".card-romance");
   if (!card) return;
   const cardId = Number(card.dataset.id);
 
-  // 编辑按钮
-  if (target.closest(".edit-btn")) {
+  if (target.closest(".btn-edit-romance")) {
     const list = getAll();
     const data = list.find(item => item.id === cardId);
     if (!data) return;
@@ -262,9 +489,8 @@ listWrap.addEventListener("click", function (e) {
     editModal.classList.remove("hidden");
   }
 
-  // 删除单条记录（优化提示文案）
-  if (target.closest(".del-btn")) {
-    if (!confirm("确定删除这条时段记录吗？删除后无法恢复！")) return;
+  if (target.closest(".btn-del-romance")) {
+    if (!confirm("确定要删除这段美好的记忆吗？删除后无法恢复哦！")) return;
     const list = getAll();
     const newList = list.filter(item => item.id !== cardId);
     setAll(newList);
@@ -273,7 +499,6 @@ listWrap.addEventListener("click", function (e) {
   }
 });
 
-// 新增记录
 $("#addBtn").addEventListener("click", function () {
   const date = $("#r_date").value;
   const type = $("#r_type").value;
@@ -282,12 +507,12 @@ $("#addBtn").addEventListener("click", function () {
   const end = $("#r_end").value;
 
   if (!date || !title || !start || !end) {
-    alert("请完整填写所有项！");
+    alert("请完整填写所有项哦！");
     return;
   }
   const duration = getDuration(start, end);
   if (duration <= 0) {
-    alert("结束时间必须晚于开始时间！");
+    alert("结束时间必须晚于开始时间呢！");
     return;
   }
 
@@ -311,12 +536,10 @@ $("#addBtn").addEventListener("click", function () {
   statistics();
 });
 
-// 编辑弹窗 - 取消
 $("#editCancel").addEventListener("click", function () {
   editModal.classList.add("hidden");
 });
 
-// 编辑弹窗 - 保存
 $("#editSave").addEventListener("click", function () {
   const targetId = Number($("#edit_id").value);
   const date = $("#edit_date").value;
@@ -325,12 +548,12 @@ $("#editSave").addEventListener("click", function () {
   const end = $("#edit_end").value;
 
   if (!date || !title || !start || !end) {
-    alert("请完整填写所有项！");
+    alert("请完整填写所有项哦！");
     return;
   }
   const duration = getDuration(start, end);
   if (duration <= 0) {
-    alert("时间设置错误！");
+    alert("时间设置有问题呢！");
     return;
   }
 
@@ -347,7 +570,6 @@ $("#editSave").addEventListener("click", function () {
   statistics();
 });
 
-// 搜索功能
 $("#searchBtn").addEventListener("click", function () {
   render($("#searchInput").value.trim());
 });
@@ -355,21 +577,18 @@ $("#searchInput").addEventListener("input", function () {
   render($("#searchInput").value.trim());
 });
 
-// 时薪实时保存 & 计算
 $("#hourWage").addEventListener("input", function () {
   setWage(this.value);
   statistics();
 });
 
-// 清空全部记录（强化风险提示）
 $("#clearAll").addEventListener("click", function () {
-  if (!confirm("⚠️ 警告：确定清空**所有记录**？该操作不可逆，数据将永久删除！")) return;
+  if (!confirm("⚠️ 确定要清空所有美好的回忆吗？该操作无法撤销哦！")) return;
   setAll([]);
   render();
   statistics();
 });
 
-// 页面初始化
 window.addEventListener("load", function () {
   $("#r_date").value = fmtToday();
   $("#hourWage").value = getWage();
@@ -378,6 +597,5 @@ window.addEventListener("load", function () {
 });
 
 </script>
-
 </body>
 </html>
