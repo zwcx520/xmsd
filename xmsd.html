@@ -6,6 +6,13 @@
   <title>『星·漫·时·段·工·时』</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdn.jsdelivr.net/npm/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.447.0/dist/umd/lucide.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.4/dist/sweetalert2.all.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.2/lib/anime.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.4/dist/sweetalert2.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -44,7 +51,6 @@
             'sparkle': 'sparkle 1.5s ease-in-out infinite',
             'sakura-fall': 'sakura-fall 12s linear infinite',
             'heart-beat': 'heart-beat 1s ease-in-out infinite',
-            'twinkle': 'twinkle 2s ease-in-out infinite',
           },
           keyframes: {
             float: {
@@ -70,10 +76,6 @@
               '0%, 100%': { transform: 'scale(1)' },
               '50%': { transform: 'scale(1.1)' },
             },
-            twinkle: {
-              '0%, 100%': { opacity: '0.3' },
-              '50%': { opacity: '1' },
-            }
           }
         }
       }
@@ -82,14 +84,20 @@
   <style type="text/tailwindcss">
     @layer utilities {
       .glass-card {
-        background: rgba(255, 255, 255, 0.65);
-        backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 183, 197, 0.4);
-        box-shadow: 0 8px 32px rgba(255, 183, 197, 0.15);
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(24px);
+        border: 1px solid rgba(255, 183, 197, 0.25);
+        box-shadow: 0 8px 32px rgba(255, 183, 197, 0.1);
+      }
+      .glass-card-dark {
+        background: rgba(240, 240, 255, 0.6);
+        backdrop-filter: blur(24px);
+        border: 1px solid rgba(147, 112, 219, 0.2);
+        box-shadow: 0 8px 32px rgba(147, 112, 219, 0.08);
       }
       .btn-romance {
         background: linear-gradient(135deg, #FFB7C5 0%, #FF69B4 50%, #9370DB 100%);
-        box-shadow: 0 4px 20px rgba(255, 105, 180, 0.4);
+        box-shadow: 0 4px 20px rgba(255, 105, 180, 0.35);
         position: relative;
         overflow: hidden;
       }
@@ -100,7 +108,7 @@
         left: -100%;
         width: 100%;
         height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
         transition: left 0.5s;
       }
       .btn-romance:hover::before {
@@ -108,17 +116,31 @@
       }
       .btn-romance:hover {
         transform: translateY(-3px);
-        box-shadow: 0 8px 30px rgba(255, 105, 180, 0.6);
+        box-shadow: 0 8px 28px rgba(255, 105, 180, 0.5);
       }
-      .stat-glass {
-        background: linear-gradient(135deg, rgba(255, 240, 245, 0.95) 0%, rgba(230, 230, 250, 0.95) 100%);
-        backdrop-filter: blur(15px);
-        border: 1px solid rgba(255, 183, 197, 0.3);
+      .stat-card {
+        background: linear-gradient(145deg, rgba(255, 248, 250, 0.92) 0%, rgba(245, 240, 255, 0.92) 100%);
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 183, 197, 0.2);
+        border-radius: 20px;
+        box-shadow: 0 4px 20px rgba(255, 183, 197, 0.08);
+        position: relative;
+        overflow: hidden;
+      }
+      .stat-card::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle, rgba(255, 183, 197, 0.15) 0%, transparent 70%);
+        pointer-events: none;
       }
       .tag-romance {
-        background: linear-gradient(135deg, #FFE4E1 0%, #E6E6FA 100%);
+        background: linear-gradient(135deg, rgba(255, 228, 225, 0.8) 0%, rgba(230, 230, 250, 0.8) 100%);
         color: #4B0082;
-        border: 1px solid rgba(255, 183, 197, 0.3);
+        border: 1px solid rgba(255, 183, 197, 0.25);
       }
       .highlight-romance {
         background: linear-gradient(135deg, #FFD700 0%, #FF69B4 100%);
@@ -128,43 +150,82 @@
         font-weight: bold;
       }
       .card-romance {
-        @apply glass-card rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all duration-500;
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(24px);
+        border: 1px solid rgba(255, 183, 197, 0.25);
+        box-shadow: 0 8px 32px rgba(255, 183, 197, 0.1);
+        border-radius: 1rem;
+        padding: 1.5rem;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        transition: all 0.5s;
       }
       .card-romance:hover {
-        transform: translateY(-5px);
+        transform: translateY(-4px);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
       }
       .input-romance {
-        @apply rounded-2xl border-none px-5 py-4 bg-white/70 shadow-sm focus:ring-4 focus:ring-sakura-300/60 outline-none transition-all;
+        border-radius: 1rem;
+        border: none;
+        padding: 0.875rem 1rem;
+        background: rgba(255, 255, 255, 0.6);
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        outline: none;
+        transition: all;
+      }
+      .input-romance:focus {
+        box-shadow: 0 0 0 3px rgba(255, 183, 197, 0.2);
       }
       .icon-btn {
-        @apply w-11 h-11 rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer;
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 9999px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s;
+        cursor: pointer;
       }
       .btn-edit-romance {
-        @apply bg-lavender-100 text-lavender-400 hover:bg-lavender-400 hover:text-white;
+        background: rgba(240, 240, 255, 0.8);
+        color: #9370DB;
+      }
+      .btn-edit-romance:hover {
+        background: rgba(147, 112, 219, 0.8);
+        color: white;
       }
       .btn-del-romance {
-        @apply bg-sakura-100 text-sakura-400 hover:bg-sakura-400 hover:text-white;
+        background: rgba(255, 240, 245, 0.8);
+        color: #FF69B4;
+      }
+      .btn-del-romance:hover {
+        background: rgba(255, 105, 180, 0.8);
+        color: white;
       }
       .star-decoration {
         position: absolute;
-        font-size: 14px;
+        font-size: 12px;
         color: #FFD700;
         animation: sparkle 1.5s ease-in-out infinite;
-        text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        text-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
       }
       .sakura-petal {
         position: absolute;
-        font-size: 16px;
+        font-size: 14px;
         color: #FFB7C5;
-        opacity: 0.8;
+        opacity: 0.7;
         pointer-events: none;
       }
       .heart-decoration {
         position: absolute;
-        font-size: 12px;
+        font-size: 10px;
         color: #FF69B4;
         animation: heart-beat 1.5s ease-in-out infinite;
-        opacity: 0.6;
+        opacity: 0.5;
+      }
+      .divider-line {
+        position: relative;
+        height: 1px;
+        background: linear-gradient(90deg, transparent 0%, rgba(255, 183, 197, 0.3) 50%, transparent 100%);
       }
     }
   </style>
@@ -172,196 +233,245 @@
 </head>
 <body class="bg-gradient-to-br from-sakura-50 via-white to-lavender-50 min-h-screen font-anime text-lavender-500 overflow-x-hidden">
   <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
-    <div class="star-decoration" style="top: 8%; left: 5%; animation-delay: 0s;">✦</div>
-    <div class="star-decoration" style="top: 18%; left: 92%; animation-delay: 0.6s;">✧</div>
-    <div class="star-decoration" style="top: 32%; left: 12%; animation-delay: 1.2s;">✦</div>
-    <div class="star-decoration" style="top: 48%; left: 88%; animation-delay: 0.9s;">✧</div>
-    <div class="star-decoration" style="top: 62%; left: 8%; animation-delay: 1.5s;">✦</div>
-    <div class="star-decoration" style="top: 78%; left: 94%; animation-delay: 0.4s;">✧</div>
-    <div class="star-decoration" style="top: 12%; left: 55%; animation-delay: 1.1s;">✦</div>
-    <div class="star-decoration" style="top: 72%; left: 28%; animation-delay: 0.7s;">✧</div>
-    <div class="star-decoration" style="top: 42%; left: 3%; animation-delay: 1.4s;">✦</div>
-    <div class="star-decoration" style="top: 88%; left: 62%; animation-delay: 0.3s;">✧</div>
-    <div class="star-decoration" style="top: 55%; left: 45%; animation-delay: 1.3s;">✦</div>
-    <div class="star-decoration" style="top: 25%; left: 35%; animation-delay: 0.8s;">✧</div>
+    <div class="star-decoration" style="top: 10%; left: 8%; animation-delay: 0s;">✦</div>
+    <div class="star-decoration" style="top: 25%; left: 90%; animation-delay: 0.5s;">✧</div>
+    <div class="star-decoration" style="top: 40%; left: 15%; animation-delay: 1.1s;">✦</div>
+    <div class="star-decoration" style="top: 55%; left: 85%; animation-delay: 0.8s;">✧</div>
+    <div class="star-decoration" style="top: 70%; left: 10%; animation-delay: 1.4s;">✦</div>
+    <div class="star-decoration" style="top: 85%; left: 92%; animation-delay: 0.3s;">✧</div>
 
-    <div class="heart-decoration" style="top: 22%; left: 18%;">♥</div>
-    <div class="heart-decoration" style="top: 58%; left: 82%; animation-delay: 0.5s;">♥</div>
-    <div class="heart-decoration" style="top: 85%; left: 25%; animation-delay: 1s;">♥</div>
-    <div class="heart-decoration" style="top: 38%; left: 75%; animation-delay: 0.3s;">♥</div>
+    <div class="heart-decoration" style="top: 18%; left: 25%;">♥</div>
+    <div class="heart-decoration" style="top: 65%; left: 78%; animation-delay: 0.6s;">♥</div>
 
-    <div class="sakura-petal animate-sakura-fall" style="top: -5%; left: 10%; animation-delay: 0s; font-size: 20px;">🌸</div>
-    <div class="sakura-petal animate-sakura-fall" style="top: -5%; left: 35%; animation-delay: 3s; font-size: 16px;">🌸</div>
-    <div class="sakura-petal animate-sakura-fall" style="top: -5%; left: 60%; animation-delay: 6s; font-size: 18px;">🌸</div>
-    <div class="sakura-petal animate-sakura-fall" style="top: -5%; left: 85%; animation-delay: 9s; font-size: 14px;">🌸</div>
-    <div class="sakura-petal animate-sakura-fall" style="top: -5%; left: 20%; animation-delay: 4s; font-size: 17px;">🌸</div>
-    <div class="sakura-petal animate-sakura-fall" style="top: -5%; left: 50%; animation-delay: 7s; font-size: 19px;">🌸</div>
-    <div class="sakura-petal animate-sakura-fall" style="top: -5%; left: 75%; animation-delay: 2s; font-size: 15px;">🌸</div>
-    <div class="sakura-petal animate-sakura-fall" style="top: -5%; left: 40%; animation-delay: 8s; font-size: 20px;">🌸</div>
+    <div class="sakura-petal animate-sakura-fall" style="top: -5%; left: 15%; animation-delay: 0s; font-size: 18px;">🌸</div>
+    <div class="sakura-petal animate-sakura-fall" style="top: -5%; left: 45%; animation-delay: 4s; font-size: 16px;">🌸</div>
+    <div class="sakura-petal animate-sakura-fall" style="top: -5%; left: 75%; animation-delay: 8s; font-size: 17px;">🌸</div>
+    <div class="sakura-petal animate-sakura-fall" style="top: -5%; left: 30%; animation-delay: 6s; font-size: 15px;">🌸</div>
   </div>
 
-  <header class="glass-card fixed top-0 left-0 w-full z-50 px-4 py-4 shadow-xl">
-    <div class="max-w-4xl mx-auto flex justify-between items-center">
-      <div class="flex items-center gap-4">
-        <div class="w-12 h-12 rounded-full btn-romance flex items-center justify-center animate-float-slow shadow-lg">
-          <i class="fa fa-hourglass-half text-white text-lg"></i>
+  <nav class="fixed top-0 left-0 right-0 z-50 glass-card shadow-lg">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center gap-4">
+          <div class="w-10 h-10 rounded-full btn-romance flex items-center justify-center shadow-md">
+            <i class="fa fa-hourglass-half text-white"></i>
+          </div>
+          <div>
+            <h1 class="text-xl font-bold bg-gradient-to-r from-sakura-400 via-lavender-300 to-sakura-400 bg-clip-text text-transparent">
+              星漫时段
+            </h1>
+          </div>
         </div>
-        <div>
-          <h1 class="text-[clamp(1.3rem,3vw,1.8rem)] font-bold bg-gradient-to-r from-sakura-400 via-lavender-300 to-sakura-400 bg-clip-text text-transparent">
-            星漫时段
-          </h1>
-          <p class="text-xs text-lavender-300">工时记录 · 珍藏美好</p>
-        </div>
-      </div>
-      <button id="clearAll" class="text-sm px-5 py-2.5 rounded-full bg-sakura-100 text-sakura-400 hover:bg-sakura-200 hover:text-sakura-500 transition-all duration-300 flex items-center gap-2 shadow-sm">
-        <i class="fa fa-trash-o"></i>清空回忆
-      </button>
-    </div>
-  </header>
-
-  <div class="pt-28 px-4 max-w-4xl mx-auto mb-8 relative z-10">
-    <div class="text-center mb-8">
-      <p class="text-lavender-300 text-sm flex items-center justify-center gap-2">
-        <i class="fa fa-heart text-sakura-400 animate-heart-beat"></i>
-        记录每一段美好的时光 · 珍藏每一份心动回忆
-        <i class="fa fa-heart text-sakura-400 animate-heart-beat"></i>
-      </p>
-    </div>
-
-    <div class="grid grid-cols-3 gap-5 mb-8">
-      <div class="stat-glass rounded-2xl p-5 text-center transform hover:scale-105 transition-transform duration-300">
-        <div class="w-12 h-12 mx-auto mb-3 rounded-full bg-gradient-to-br from-sakura-300 to-lavender-300 flex items-center justify-center shadow-lg">
-          <i class="fa fa-book text-white text-lg"></i>
-        </div>
-        <p class="text-xs text-lavender-300 mb-2">记忆碎片</p>
-        <p id="totalCount" class="text-2xl font-bold bg-gradient-to-r from-sakura-400 to-lavender-300 bg-clip-text text-transparent">0</p>
-      </div>
-      <div class="stat-glass rounded-2xl p-5 text-center transform hover:scale-105 transition-transform duration-300">
-        <div class="w-12 h-12 mx-auto mb-3 rounded-full bg-gradient-to-br from-starlight-blue to-lavender-300 flex items-center justify-center shadow-lg">
-          <i class="fa fa-clock-o text-white text-lg"></i>
-        </div>
-        <p class="text-xs text-lavender-300 mb-2">时光长河</p>
-        <p id="totalWorkHour" class="text-2xl font-bold bg-gradient-to-r from-starlight-blue to-lavender-300 bg-clip-text text-transparent">0h</p>
-      </div>
-      <div class="stat-glass rounded-2xl p-5 text-center transform hover:scale-105 transition-transform duration-300">
-        <div class="w-12 h-12 mx-auto mb-3 rounded-full bg-gradient-to-br from-starlight-gold to-sakura-400 flex items-center justify-center shadow-lg">
-          <i class="fa fa-gift text-white text-lg"></i>
-        </div>
-        <p class="text-xs text-lavender-300 mb-2">收获满满</p>
-        <p id="totalWage" class="text-2xl font-bold bg-gradient-to-r from-starlight-gold to-sakura-400 bg-clip-text text-transparent">¥0.00</p>
+        <button id="clearAll" class="flex items-center gap-2 px-4 py-2 rounded-full bg-sakura-50 text-sakura-400 hover:bg-sakura-100 hover:text-sakura-500 transition-all duration-300 text-sm">
+          <i class="fa fa-trash-o"></i>清空回忆
+        </button>
       </div>
     </div>
+  </nav>
 
-    <div class="glass-card rounded-2xl p-4 flex items-center gap-4 mb-4">
-      <div class="w-12 h-12 rounded-full bg-gradient-to-br from-sakura-300 to-lavender-300 flex items-center justify-center shadow-md">
-        <i class="fa fa-yen text-white"></i>
+  <main class="relative z-10 pt-24 pb-24 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-8">
+        <p class="text-lavender-300 text-sm flex items-center justify-center gap-3">
+          <span class="text-sakura-400">✧</span>
+          记录每一段美好的时光 · 珍藏每一份心动回忆
+          <span class="text-sakura-400">✧</span>
+        </p>
       </div>
-      <input id="hourWage" type="number" placeholder="请输入每小时的心动值..." class="flex-1 bg-transparent outline-none text-sm text-lavender-500 placeholder-lavender-300">
-      <span class="text-xs text-lavender-300">¥/小时</span>
-    </div>
 
-    <div class="glass-card rounded-2xl p-4 flex items-center gap-4">
-      <div class="w-12 h-12 rounded-full bg-gradient-to-br from-lavender-100 to-lavender-300 flex items-center justify-center shadow-md">
-        <i class="fa fa-search text-white"></i>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">
+        <div class="lg:col-span-8 space-y-6">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="stat-card p-5 text-center transform hover:scale-105 transition-transform duration-300">
+              <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-sakura-200 to-sakura-300 shadow-md mb-3">
+                <i class="fa fa-book text-white"></i>
+              </div>
+              <p class="text-xs text-lavender-300 mb-1">记忆碎片</p>
+              <p id="totalCount" class="text-xl font-bold text-lavender-500">0</p>
+            </div>
+            <div class="stat-card p-5 text-center transform hover:scale-105 transition-transform duration-300">
+              <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-blue-200 to-lavender-300 shadow-md mb-3">
+                <i class="fa fa-clock-o text-white"></i>
+              </div>
+              <p class="text-xs text-lavender-300 mb-1">时光长河</p>
+              <p id="totalWorkHour" class="text-xl font-bold text-lavender-500">0h</p>
+            </div>
+            <div class="stat-card p-5 text-center transform hover:scale-105 transition-transform duration-300">
+              <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-amber-200 to-sakura-300 shadow-md mb-3">
+                <i class="fa fa-gift text-white"></i>
+              </div>
+              <p class="text-xs text-lavender-300 mb-1">收获满满</p>
+              <p id="totalWage" class="text-xl font-bold text-lavender-500">¥0.00</p>
+            </div>
+          </div>
+
+          <div class="glass-card rounded-2xl p-5">
+            <h3 class="text-sm font-semibold text-lavender-500 mb-4 flex items-center gap-2">
+              <i data-lucide="bar-chart-2" class="w-4 h-4 text-sakura-400"></i> 工时统计图表
+            </h3>
+            <div class="h-48">
+              <canvas id="workChart"></canvas>
+            </div>
+          </div>
+
+          <div class="glass-card-dark rounded-2xl p-6">
+            <div class="text-center mb-6">
+              <h2 class="text-lg font-bold text-lavender-500">
+                ✨ 记录新的时光
+              </h2>
+            </div>
+            
+            <div class="space-y-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="relative">
+                  <label for="r_date" class="block text-xs text-lavender-300 mb-1.5">日期</label>
+                  <input type="date" id="r_date" class="input-romance w-full">
+                </div>
+                <div class="relative">
+                  <label for="r_type" class="block text-xs text-lavender-300 mb-1.5">类型</label>
+                  <select id="r_type" class="input-romance w-full appearance-none">
+                    <option value="上班">✨ 工作时光</option>
+                    <option value="休息">🌸 休息时刻</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="relative">
+                <label for="r_title" class="block text-xs text-lavender-300 mb-1.5">事项</label>
+                <input type="text" id="r_title" placeholder="今天发生了什么有趣的事？" class="input-romance w-full">
+              </div>
+              
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="relative">
+                  <label for="r_start" class="block text-xs text-lavender-300 mb-1.5">开始时间</label>
+                  <input type="time" id="r_start" class="input-romance w-full">
+                </div>
+                <div class="relative">
+                  <label for="r_end" class="block text-xs text-lavender-300 mb-1.5">结束时间</label>
+                  <input type="time" id="r_end" class="input-romance w-full">
+                </div>
+              </div>
+              
+              <button id="addBtn" class="w-full btn-romance text-white rounded-xl py-3.5 font-medium transition-all flex items-center justify-center gap-2">
+                <i class="fa fa-heart"></i> 珍藏这段时光
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-4 space-y-4">
+          <div class="glass-card rounded-2xl p-4">
+            <h3 class="text-xs font-semibold text-lavender-400 mb-3 uppercase tracking-wider">设置</h3>
+            <div class="relative mb-4">
+              <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <i class="fa fa-yen text-lavender-300 text-xs"></i>
+              </div>
+              <input id="hourWage" type="number" placeholder="每小时心动值" class="w-full pl-8 bg-white/50 rounded-lg px-3 py-2.5 text-sm text-lavender-500 placeholder-lavender-300 outline-none focus:ring-2 focus:ring-sakura-300/40 transition-all">
+              <span class="text-xs text-lavender-300 mt-1 block">¥/小时</span>
+            </div>
+          </div>
+
+          <div class="glass-card rounded-2xl p-4">
+            <h3 class="text-xs font-semibold text-lavender-400 mb-3 uppercase tracking-wider">搜索</h3>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <i class="fa fa-search text-lavender-300 text-xs"></i>
+              </div>
+              <input id="searchInput" type="text" placeholder="搜索回忆..." class="w-full pl-8 bg-white/50 rounded-lg px-3 py-2.5 text-sm text-lavender-500 placeholder-lavender-300 outline-none focus:ring-2 focus:ring-sakura-300/40 transition-all">
+            </div>
+            <button id="searchBtn" class="w-full mt-3 btn-romance text-white rounded-lg py-2.5 text-sm font-medium transition-all">
+              搜索
+            </button>
+          </div>
+
+          <div class="glass-card-dark rounded-2xl p-4">
+            <h3 class="text-xs font-semibold text-lavender-400 mb-3 uppercase tracking-wider">今日概览</h3>
+            <div class="space-y-3">
+              <div class="flex justify-between items-center text-sm">
+                <span class="text-lavender-300">今日记录</span>
+                <span id="todayCount" class="font-bold text-lavender-500">0</span>
+              </div>
+              <div class="flex justify-between items-center text-sm">
+                <span class="text-lavender-300">今日工时</span>
+                <span id="todayHours" class="font-bold text-sakura-400">0h</span>
+              </div>
+              <div class="divider-line my-3"></div>
+              <div class="flex justify-between items-center text-sm">
+                <span class="text-lavender-300">今日收入</span>
+                <span id="todayWage" class="font-bold text-amber-500">¥0.00</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <input id="searchInput" type="text" placeholder="搜索那些美好的回忆..." class="flex-1 bg-transparent outline-none text-sm text-lavender-500 placeholder-lavender-300">
-      <button id="searchBtn" class="px-5 py-2.5 btn-romance text-white rounded-xl text-sm flex items-center gap-2">
-        <i class="fa fa-magic"></i>搜索
-      </button>
-    </div>
-  </div>
 
-  <main class="px-4 max-w-4xl mx-auto space-y-6 pb-32 relative z-10">
-    <div class="glass-card rounded-3xl p-7 shadow-2xl animate-pulse-glow">
-      <div class="text-center mb-7">
-        <h2 class="text-xl font-bold text-lavender-500 flex items-center justify-center gap-3">
-          <span class="starlight-gold text-lg">✧</span> 记录新的时光 <span class="starlight-gold text-lg">✧</span>
+      <div class="divider-line mb-8"></div>
+
+      <div>
+        <h2 class="text-lg font-bold text-lavender-500 mb-6 flex items-center gap-2">
+          <span class="text-sakura-400">✧</span> 时光回忆录
         </h2>
-        <p class="text-xs text-lavender-300 mt-1">每一段时光都值得被珍藏 · 每一份回忆都独一无二</p>
-      </div>
-      
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
-        <div class="relative">
-          <input type="date" id="r_date" class="input-romance w-full">
-          <i class="fa fa-calendar text-lavender-300 absolute right-5 top-1/2 transform -translate-y-1/2"></i>
-        </div>
-        <div class="relative">
-          <select id="r_type" class="input-romance w-full appearance-none">
-            <option value="上班">✨ 工作时光</option>
-            <option value="休息">🌸 休息时刻</option>
-          </select>
-          <i class="fa fa-chevron-down text-lavender-300 absolute right-5 top-1/2 transform -translate-y-1/2 pointer-events-none"></i>
+        
+        <div id="listWrap" class="grid grid-cols-1 md:grid-cols-2 gap-5"></div>
+        
+        <div id="empty" class="text-center py-16">
+          <div class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-sakura-50 to-lavender-50 shadow-sm mb-4">
+            <i class="fa fa-cloud text-sakura-300 text-4xl"></i>
+          </div>
+          <p class="text-lavender-300 mb-2">还没有任何回忆...</p>
+          <p class="text-sm text-sakura-400">开始记录你的美好时光吧 🌸</p>
         </div>
       </div>
-      
-      <div class="relative mb-6">
-        <input type="text" id="r_title" placeholder="今天发生了什么有趣的事？" class="input-romance w-full">
-        <i class="fa fa-pencil text-lavender-300 absolute right-5 top-1/2 transform -translate-y-1/2"></i>
-      </div>
-      
-      <div class="grid grid-cols-2 gap-5 mb-7">
-        <div class="relative">
-          <input type="time" id="r_start" class="input-romance w-full">
-          <i class="fa fa-play-circle text-green-400/70 absolute right-5 top-1/2 transform -translate-y-1/2"></i>
-        </div>
-        <div class="relative">
-          <input type="time" id="r_end" class="input-romance w-full">
-          <i class="fa fa-stop-circle text-sakura-400/70 absolute right-5 top-1/2 transform -translate-y-1/2"></i>
-        </div>
-      </div>
-      
-      <button id="addBtn" class="w-full btn-romance text-white rounded-2xl py-4 font-medium transition-all flex items-center justify-center gap-3 text-base">
-        <i class="fa fa-heart animate-heart-beat"></i> 珍藏这段时光
-      </button>
-    </div>
-
-    <div id="listWrap" class="space-y-5"></div>
-    
-    <div id="empty" class="text-center py-24">
-      <div class="w-32 h-32 mx-auto mb-6 rounded-full bg-gradient-to-br from-sakura-50 to-lavender-50 flex items-center justify-center shadow-lg">
-        <i class="fa fa-cloud text-sakura-300 text-5xl"></i>
-      </div>
-      <p class="text-lavender-300 mb-3">还没有任何回忆...</p>
-      <p class="text-sm text-sakura-400 flex items-center justify-center gap-2">
-        <span>🌸</span> 开始记录你的美好时光吧 <span>🌸</span>
-      </p>
     </div>
   </main>
 
-  <div id="editModal" class="fixed inset-0 bg-black/40 z-50 hidden flex items-center justify-center px-4">
-    <div class="glass-card rounded-3xl p-7 w-full max-w-sm shadow-2xl animate-float">
-      <div class="text-center mb-6">
-        <h3 class="text-xl font-bold text-lavender-500 flex items-center justify-center gap-3">
-          <span class="starlight-gold">✧</span> 编辑记忆 <span class="starlight-gold">✧</span>
-        </h3>
-      </div>
-      <input type="hidden" id="edit_id">
-      <div class="space-y-4 mb-7">
-        <input type="date" id="edit_date" class="input-romance w-full">
-        <input type="text" id="edit_title" class="input-romance w-full" placeholder="美好的回忆...">
-        <div class="grid grid-cols-2 gap-4">
-          <input type="time" id="edit_start" class="input-romance w-full">
-          <input type="time" id="edit_end" class="input-romance w-full">
+  <div id="editModal" class="fixed inset-0 z-50 hidden">
+    <div class="fixed inset-0 bg-black/30 backdrop-blur-sm"></div>
+    <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+      <div class="flex min-h-full items-center justify-center p-4">
+        <div class="relative w-full max-w-sm">
+          <div class="glass-card rounded-2xl p-6 shadow-2xl">
+            <div class="text-center mb-5">
+              <h3 class="text-lg font-bold text-lavender-500">编辑记忆</h3>
+            </div>
+            <input type="hidden" id="edit_id">
+            <div class="space-y-4">
+              <div class="relative">
+                <label for="edit_date" class="block text-xs text-lavender-300 mb-1.5">日期</label>
+                <input type="date" id="edit_date" class="input-romance w-full">
+              </div>
+              <div class="relative">
+                <label for="edit_title" class="block text-xs text-lavender-300 mb-1.5">事项</label>
+                <input type="text" id="edit_title" class="input-romance w-full" placeholder="美好的回忆...">
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <div class="relative">
+                  <label for="edit_start" class="block text-xs text-lavender-300 mb-1.5">开始时间</label>
+                  <input type="time" id="edit_start" class="input-romance w-full">
+                </div>
+                <div class="relative">
+                  <label for="edit_end" class="block text-xs text-lavender-300 mb-1.5">结束时间</label>
+                  <input type="time" id="edit_end" class="input-romance w-full">
+                </div>
+              </div>
+            </div>
+            <div class="flex gap-3 mt-6">
+              <button id="editCancel" class="flex-1 py-2.5 rounded-xl bg-gray-100 text-gray-500 hover:bg-gray-200 transition-all text-sm">取消</button>
+              <button id="editSave" class="flex-1 py-2.5 rounded-xl btn-romance text-white transition-all text-sm">保存</button>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="flex gap-4">
-        <button id="editCancel" class="flex-1 py-3 rounded-xl bg-gray-100 text-gray-500 hover:bg-gray-200 transition-all duration-300 flex items-center justify-center gap-2">
-          <i class="fa fa-times"></i>取消
-        </button>
-        <button id="editSave" class="flex-1 py-3 rounded-xl btn-romance text-white flex items-center justify-center gap-2">
-          <i class="fa fa-check"></i>保存
-        </button>
       </div>
     </div>
   </div>
 
-  <footer class="fixed bottom-0 left-0 w-full glass-card py-4 text-center z-40">
-    <div class="text-xs text-lavender-300 flex items-center justify-center gap-2">
-      <span>©️ 星漫时段工时记录</span>
-      <span class="text-sakura-400">♥</span>
-      <span>愿每一段时光都美好</span>
-      <span class="text-sakura-400">♥</span>
-      <span>樱花飘落的季节</span>
+  <footer class="fixed bottom-0 left-0 right-0 glass-card py-3 z-40">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-xs text-lavender-300 flex flex-wrap items-center justify-center gap-2">
+        <span>©️ 星漫时段工时记录</span>
+        <span class="text-sakura-400">♥</span>
+        <span>愿每一段时光都美好</span>
+      </div>
     </div>
   </footer>
 
@@ -371,6 +481,7 @@ const STORAGE_WAGE = "star_anime_hour_wage";
 const $ = (s) => document.querySelector(s);
 const listWrap = $("#listWrap");
 const editModal = $("#editModal");
+let workChart = null;
 
 const getAll = () => JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
 const setAll = (arr) => localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
@@ -378,6 +489,22 @@ const getWage = () => Number(localStorage.getItem(STORAGE_WAGE)) || 0;
 const setWage = (val) => localStorage.setItem(STORAGE_WAGE, Number(val) || 0);
 
 const fmtToday = () => new Date().toISOString().split("T")[0];
+
+function showToast(message, type = 'success') {
+  Swal.fire({
+    toast: true,
+    position: 'top-right',
+    icon: type,
+    title: message,
+    showConfirmButton: false,
+    timer: 2000,
+    backdrop: false,
+    customClass: {
+      popup: 'glass-card rounded-xl',
+      title: 'text-lavender-500'
+    }
+  });
+}
 
 function getDuration(start, end) {
   if (!start || !end) return 0;
@@ -401,6 +528,107 @@ function statistics() {
   $("#totalWorkHour").textContent = totalWorkHour.toFixed(1) + "h";
   const totalWage = totalWorkHour * hourWage;
   $("#totalWage").textContent = "¥" + totalWage.toFixed(2);
+
+  const today = fmtToday();
+  const todayList = list.filter(item => item.date === today);
+  $("#todayCount").textContent = todayList.length;
+  const todayWorkHour = todayList
+    .filter(item => item.type === "上班")
+    .reduce((sum, item) => sum + Number(item.duration || 0), 0);
+  $("#todayHours").textContent = todayWorkHour.toFixed(1) + "h";
+  $("#todayWage").textContent = "¥" + (todayWorkHour * hourWage).toFixed(2);
+
+  renderChart(list);
+}
+
+function renderChart(list) {
+  const ctx = document.getElementById('workChart');
+  if (!ctx) return;
+
+  const last7Days = [];
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    last7Days.push(d.toISOString().split("T")[0]);
+  }
+
+  const workData = last7Days.map(date => {
+    return list
+      .filter(item => item.date === date && item.type === "上班")
+      .reduce((sum, item) => sum + Number(item.duration || 0), 0);
+  });
+
+  const restData = last7Days.map(date => {
+    return list
+      .filter(item => item.date === date && item.type === "休息")
+      .reduce((sum, item) => sum + Number(item.duration || 0), 0);
+  });
+
+  const labels = last7Days.map(date => {
+    const d = new Date(date);
+    return `${d.getMonth() + 1}/${d.getDate()}`;
+  });
+
+  if (workChart) {
+    workChart.destroy();
+  }
+
+  workChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: '工作时长',
+          data: workData,
+          backgroundColor: 'rgba(255, 105, 180, 0.65)',
+          borderRadius: 6,
+        },
+        {
+          label: '休息时长',
+          data: restData,
+          backgroundColor: 'rgba(147, 112, 219, 0.65)',
+          borderRadius: 6,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            color: '#4B0082',
+            font: {
+              family: '"ZCOOL KuaiLe", sans-serif'
+            },
+            padding: 16,
+            usePointStyle: true
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          grid: {
+            color: 'rgba(255, 183, 197, 0.15)'
+          },
+          ticks: {
+            color: '#4B0082'
+          }
+        },
+        x: {
+          grid: {
+            display: false
+          },
+          ticks: {
+            color: '#4B0082'
+          }
+        }
+      }
+    }
+  });
 }
 
 function highlight(text, kw) {
@@ -434,9 +662,9 @@ function render(searchKw = "") {
   filtered.forEach(item => {
     html += `
     <div class="card-romance" data-id="${item.id}">
-      <div class="flex justify-between items-start mb-4">
-        <span class="tag-romance text-xs px-4 py-2 rounded-full shadow-sm">${highlight(item.type === '上班' ? '✨ 工作时光' : '🌸 休息时刻', searchKw)}</span>
-        <div class="flex gap-3">
+      <div class="flex justify-between items-start mb-3">
+        <span class="tag-romance text-xs px-3 py-1.5 rounded-full">${highlight(item.type === '上班' ? '✨ 工作时光' : '🌸 休息时刻', searchKw)}</span>
+        <div class="flex gap-2">
           <div class="icon-btn btn-edit-romance" title="编辑记忆">
             <i class="fa fa-pencil"></i>
           </div>
@@ -445,15 +673,15 @@ function render(searchKw = "") {
           </div>
         </div>
       </div>
-      <h4 class="text-lg font-semibold mb-4 text-lavender-500">${highlight(item.title, searchKw)}</h4>
-      <div class="flex justify-between items-center text-sm text-gray-400 mb-4">
+      <h4 class="text-base font-semibold mb-3 text-lavender-500">${highlight(item.title, searchKw)}</h4>
+      <div class="flex justify-between items-center text-sm text-gray-400 mb-3">
         <div class="flex items-center gap-2">
-          <span class="w-3 h-3 rounded-full bg-green-400 shadow-sm"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-green-400"></span>
           <span>${highlight(item.start, searchKw)}</span>
         </div>
-        <div class="text-sakura-300 text-lg">→</div>
+        <div class="text-sakura-300">→</div>
         <div class="flex items-center gap-2">
-          <span class="w-3 h-3 rounded-full bg-sakura-400 shadow-sm"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-sakura-400"></span>
           <span>${highlight(item.end, searchKw)}</span>
         </div>
       </div>
@@ -461,7 +689,7 @@ function render(searchKw = "") {
         <div class="text-xs text-lavender-300 flex items-center gap-1">
           <i class="fa fa-calendar"></i> ${highlight(item.date, searchKw)}
         </div>
-        <div class="text-sakura-400 font-bold flex items-center gap-2">
+        <div class="text-sakura-400 font-bold flex items-center gap-1">
           <i class="fa fa-clock-o"></i> ${item.duration}h
         </div>
       </div>
@@ -490,12 +718,31 @@ listWrap.addEventListener("click", function (e) {
   }
 
   if (target.closest(".btn-del-romance")) {
-    if (!confirm("确定要删除这段美好的记忆吗？删除后无法恢复哦！")) return;
-    const list = getAll();
-    const newList = list.filter(item => item.id !== cardId);
-    setAll(newList);
-    render($("#searchInput").value.trim());
-    statistics();
+    Swal.fire({
+      title: '删除记忆？',
+      text: '确定要删除这段美好的记忆吗？删除后无法恢复哦！',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: '确定删除',
+      cancelButtonText: '取消',
+      confirmButtonColor: '#FF69B4',
+      cancelButtonColor: '#9370DB',
+      backdrop: 'rgba(255, 183, 197, 0.3)',
+      customClass: {
+        popup: 'glass-card rounded-xl',
+        title: 'text-lavender-500',
+        content: 'text-lavender-300'
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const list = getAll();
+        const newList = list.filter(item => item.id !== cardId);
+        setAll(newList);
+        render($("#searchInput").value.trim());
+        statistics();
+        showToast('记忆已删除', 'success');
+      }
+    });
   }
 });
 
@@ -507,12 +754,12 @@ $("#addBtn").addEventListener("click", function () {
   const end = $("#r_end").value;
 
   if (!date || !title || !start || !end) {
-    alert("请完整填写所有项哦！");
+    showToast('请完整填写所有项哦！', 'error');
     return;
   }
   const duration = getDuration(start, end);
   if (duration <= 0) {
-    alert("结束时间必须晚于开始时间呢！");
+    showToast('结束时间必须晚于开始时间呢！', 'error');
     return;
   }
 
@@ -534,6 +781,7 @@ $("#addBtn").addEventListener("click", function () {
 
   render();
   statistics();
+  showToast('时光已珍藏 ✨');
 });
 
 $("#editCancel").addEventListener("click", function () {
@@ -548,12 +796,12 @@ $("#editSave").addEventListener("click", function () {
   const end = $("#edit_end").value;
 
   if (!date || !title || !start || !end) {
-    alert("请完整填写所有项哦！");
+    showToast('请完整填写所有项哦！', 'error');
     return;
   }
   const duration = getDuration(start, end);
   if (duration <= 0) {
-    alert("时间设置有问题呢！");
+    showToast('时间设置有问题呢！', 'error');
     return;
   }
 
@@ -568,6 +816,7 @@ $("#editSave").addEventListener("click", function () {
 
   render($("#searchInput").value.trim());
   statistics();
+  showToast('记忆已更新 ✨');
 });
 
 $("#searchBtn").addEventListener("click", function () {
@@ -583,10 +832,29 @@ $("#hourWage").addEventListener("input", function () {
 });
 
 $("#clearAll").addEventListener("click", function () {
-  if (!confirm("⚠️ 确定要清空所有美好的回忆吗？该操作无法撤销哦！")) return;
-  setAll([]);
-  render();
-  statistics();
+  Swal.fire({
+    title: '清空所有回忆？',
+    text: '确定要清空所有美好的回忆吗？该操作无法撤销！',
+    icon: 'error',
+    showCancelButton: true,
+    confirmButtonText: '确定清空',
+    cancelButtonText: '取消',
+    confirmButtonColor: '#FF69B4',
+    cancelButtonColor: '#9370DB',
+    backdrop: 'rgba(255, 183, 197, 0.3)',
+    customClass: {
+      popup: 'glass-card rounded-xl',
+      title: 'text-lavender-500',
+      content: 'text-lavender-300'
+    }
+  }).then((result) => {
+    if (result.isConfirmed) {
+      setAll([]);
+      render();
+      statistics();
+      showToast('回忆已清空', 'success');
+    }
+  });
 });
 
 window.addEventListener("load", function () {
@@ -594,6 +862,35 @@ window.addEventListener("load", function () {
   $("#hourWage").value = getWage();
   render();
   statistics();
+
+  lucide.createIcons();
+
+  anime({
+    targets: '.star-decoration',
+    scale: [0, 1],
+    opacity: [0, 1],
+    delay: anime.stagger(200),
+    duration: 1000,
+    easing: 'easeOutElastic(1, .8)'
+  });
+
+  anime({
+    targets: '.card-romance',
+    translateY: [15, 0],
+    opacity: [0, 1],
+    delay: anime.stagger(80),
+    duration: 600,
+    easing: 'easeOutQuad'
+  });
+
+  anime({
+    targets: '.stat-card',
+    scale: [0.95, 1],
+    opacity: [0, 1],
+    delay: anime.stagger(100),
+    duration: 500,
+    easing: 'easeOutBack'
+  });
 });
 
 </script>
