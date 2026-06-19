@@ -79,7 +79,7 @@ window.addEventListener('load', function () {
 
 // ===================== 【核心：在这里修改版本号】=====================
 // 每次想重新弹窗，只需要修改这里的版本即可（例如 V123 → V124 / 2.0 / 1.5.3）
-const CURRENT_VERSION = "V1.1.2";
+const CURRENT_VERSION = "V1.1.3";
 // ===================================================================
 
 // 下载函数：直接下载，不跳转页面
@@ -142,7 +142,7 @@ function showUpdateModal() {
 
     // 提示文案
     const desc = document.createElement('p');
-    desc.innerText = '1.重新设计，更换了app图标\n2.本次更新不会删除数据，建议立即更新！';
+    desc.innerText = '1.新版本添加日历页面功能，可以阅览当月所有工时情况\n2.本次更新不会删除数据，建议立即更新！';
     desc.style.cssText = `
         margin: 0 0 25px 0;
         font-size: 14px;
