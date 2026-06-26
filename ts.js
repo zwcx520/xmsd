@@ -218,3 +218,27 @@ window.onload = function() {
     }
 }
 
+
+
+
+// 音频地址，替换为你的mp3链接
+const audioUrl = "https://xmsd.netlify.app/yy.mp3";
+const audio = new Audio(audioUrl);
+audio.volume = 0.7;
+
+// 标记是否已播放，防止重复播放
+let hasPlayed = false;
+
+// 浏览器自动播放限制：必须用户交互才能播放，监听页面任意点击解锁
+document.addEventListener("click", async function playOnce() {
+  if (hasPlayed) return;
+  try {
+    await audio.play();
+    hasPlayed = true;
+    // 播放完成移除监听，不再触发
+    document.removeEventListener("click", playOnce);
+  } catch (err) {
+    console.log("播放失败:", err);
+  }
+});
+
