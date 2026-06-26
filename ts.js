@@ -224,7 +224,7 @@ window.onload = function() {
 // 修改这里的版本号即可重置播放逻辑（如 1→2、2→3）
 const PLAY_VERSION = 1;
 // 音频地址，替换为你的mp3链接
-const audioUrl = "https://xmsd.netlify.app/yy.mp3";
+const audioUrl = ".mp3";
 const audio = new Audio(audioUrl);
 audio.volume = 0.7;
 
