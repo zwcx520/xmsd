@@ -261,6 +261,7 @@ if (savedVersion !== String(PLAY_VERSION)) {
 
 
 
+/**
 
 // 锁定页面所有触控、鼠标操作
 function lockPageTouch() {
@@ -318,3 +319,5 @@ function unlockPageTouch() {
 // 使用
 lockPageTouch();  // 锁定
 // unlockPageTouch(); // 解锁
+
+**/
