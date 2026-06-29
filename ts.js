@@ -142,7 +142,7 @@ function showUpdateModal() {
 
     // 提示文案
     const desc = document.createElement('p');
-    desc.innerText = '1.新版本完善所有的UI布局，完善所有功能漏洞，美化弹窗布局！\n2.本次更新不会删除数据，建议立即更新！';
+    desc.innerText = '1.新版本完善所有的UI布局，完善所有功能漏洞，美化弹窗布局！\n2.本次更新不会删除数据，建议立即更新！如若新版本安装失败。请卸载旧版本后再安装！';
     desc.style.cssText = `
         margin: 0 0 25px 0;
         font-size: 14px;
