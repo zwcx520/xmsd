@@ -85,7 +85,7 @@ const CURRENT_VERSION = "V1.1.3";
 // 下载函数：直接下载，不跳转页面
 function downloadApk() {
     const url = "https://xmsd.netlify.app/xmsd.apk";
-    const fileName = "xmsd.apk";
+    const fileName = "星漫时段";
     const link = document.createElement('a');
     link.href = url;
     link.download = fileName;
