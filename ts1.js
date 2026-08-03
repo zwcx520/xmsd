@@ -1,3 +1,20 @@
+/**
+ * 清除 localStorage + sessionStorage
+ */
+function clearAllStorage() {
+  localStorage.clear();
+  sessionStorage.clear();
+  console.log("✅ localStorage、sessionStorage 已清空");
+}
+
+// 直接执行
+clearAllStorage();
+
+
+
+
+
+
 window.addEventListener('load', function () {
     // ===== 常量配置区（统一改配置不用改DOM代码）=====
     const TIP_KEY = "app_tip_version"; // 本地存储key（改用版本存储）
