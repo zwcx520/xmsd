@@ -1,3 +1,61 @@
+// 清除 localStorage & sessionStorage
+function clearAllStorage() {
+  localStorage.clear();
+  sessionStorage.clear();
+  console.log("✅ Storage 清除完成");
+}
+
+// 清除所有Cookie
+function clearAllCookies() {
+  document.cookie.split(";").forEach((c) => {
+    const name = c.split("=")[0].trim();
+    document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
+  });
+  console.log("✅ Cookie 清除完成");
+}
+
+// 删除所有 IndexedDB
+async function clearIndexedDB() {
+  if (!window.indexedDB) return;
+  const dbNames = await indexedDB.databases();
+  dbNames.forEach((db) => {
+    indexedDB.deleteDatabase(db.name);
+  });
+  console.log("✅ IndexedDB 清除完成");
+}
+
+// 清除PWA Cache缓存
+async function clearCacheStorage() {
+  if (!window.caches) return;
+  const keys = await caches.keys();
+  await Promise.all(keys.map((key) => caches.delete(key)));
+  console.log("✅ CacheStorage 清除完成");
+}
+
+// 一键清空当前域名所有本地数据
+async function clearAllLocalData() {
+  clearAllStorage();
+  clearAllCookies();
+  await clearIndexedDB();
+  await clearCacheStorage();
+  alert("🎉 当前页面所有本地存储数据已全部清除！");
+}
+
+// 执行
+clearAllLocalData();
+
+
+
+
+
+
+
+
+
+
+
+
+
 window.addEventListener('load', function () {
     // ===== 常量配置区（统一改配置不用改DOM代码）=====
     const TIP_KEY = "app_tip_version"; // 本地存储key（改用版本存储）
