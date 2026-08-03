@@ -1,4 +1,3 @@
-
 // 清除 localStorage & sessionStorage
 function clearAllStorage() {
   localStorage.clear();
@@ -34,6 +33,16 @@ async function clearCacheStorage() {
 }
 
 // 一键清空当前域名所有本地数据
+async function clearAllLocalData() {
+  clearAllStorage();
+  clearAllCookies();
+  await clearIndexedDB();
+  await clearCacheStorage();
+  alert("🎉 当前页面所有本地存储数据已全部清除！");
+}
+
+// 执行
+clearAllLocalData();
 async function clearAllLocalData() {
   clearAllStorage();
   clearAllCookies();
