@@ -1,14 +1,7 @@
-
-
-
-
-
-
-
 /**
- * 弹出小程序码弹窗
- * 顶部显示说明文字：星漫时段小程序已上线
- * 图片缩小，衬托文字
+ * 页面加载完成后【自动弹出】小程序码弹窗
+ * 顶部：星漫时段小程序已上线
+ * 图片缩小，带提示文字
  */
 function showImageModal() {
     if (document.getElementById('js-image-modal')) return;
@@ -45,7 +38,7 @@ function showImageModal() {
         user-select: none;
     `;
 
-    // 顶部说明文字
+    // 顶部标题文字
     const titleText = document.createElement('div');
     titleText.innerText = '星漫时段小程序已上线';
     titleText.style.cssText = `
@@ -56,7 +49,7 @@ function showImageModal() {
         letter-spacing: 1px;
     `;
 
-    // 小程序码图片容器，用于控制图片大小
+    // 图片容器，控制二维码尺寸
     const imgWrap = document.createElement('div');
     imgWrap.style.cssText = `
         width: 260px;
@@ -74,7 +67,6 @@ function showImageModal() {
         object-fit: contain;
         border-radius: 8px;
     `;
-
     imgWrap.appendChild(img);
 
     // 底部提示
@@ -98,7 +90,6 @@ function showImageModal() {
     }
 
     closeBtn.onclick = closeModal;
-
     mask.onclick = function (e) {
         if (e.target === mask) closeModal();
     };
@@ -106,9 +97,13 @@ function showImageModal() {
     function escHandler(e) {
         if (e.key === 'Escape') closeModal();
     }
-
     document.addEventListener('keydown', escHandler);
 }
+
+// ==========页面加载完毕自动执行弹窗 ==========
+window.addEventListener('load',function(){
+    showImageModal();
+})
 
 
 
