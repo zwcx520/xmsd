@@ -67,7 +67,7 @@ function showImageModal() {
     `;
 
     const img = document.createElement('img');
-    img.src = 'xmsdxcx.jpg';
+    img.src = 'https://xmsd.netlify.app/xmsdxcx.jpg';
     img.style.cssText = `
         width: 100%;
         height: 100%;
